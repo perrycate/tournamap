@@ -27,3 +27,6 @@ tournamap-*.tar
 
 # Personal notes.
 notes.md
+
+# Dumped data from smash.gg
+tournaments.json
