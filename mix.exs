@@ -22,7 +22,8 @@ defmodule Tournamap.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.8"},
-      {:json, "~> 1.4"}
+      {:json, "~> 1.4"},
+      {:trot, github: "hexedpackets/trot"},
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
