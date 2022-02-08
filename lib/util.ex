@@ -76,7 +76,7 @@ defmodule Util do
         },
         "start_time" => sgg_data["startAt"],
         "end_time" => sgg_data["endAt"],
-        "url" => sgg_data["slug"]
+        "url" => "https://smash.gg/" <> sgg_data["slug"]
       }
     end)
   end
