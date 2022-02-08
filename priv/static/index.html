@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <!--TODO what if the style is after the script?-->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <style>
+        #mapid {
+            height: 900px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mapid"></div>
+</body>
+<script>
+    let myMap = L.map('mapid').setView([51.505, -0.09], 13);
+    let OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(myMap);
+    //let marker = L.marker([51.5, -0.09]).addTo(myMap);
+    //marker.bindPopup("hello, world!");
+
+    let popup = L.popup().setLatLng([51.5, -0.09]).setContent("standalone popup").openOn(myMap);
+
+</script>
+
+</html>
