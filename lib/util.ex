@@ -18,7 +18,7 @@ defmodule Util do
 
   def get_tourney_page(auth, page_num) do
     body = %{
-      "query" => "query TournamentsByState($perPage: Int, $pageNum: Int) {
+      "query" => "query AllUltimateTournaments($perPage: Int, $pageNum: Int) {
   tournaments(query: {
     page: $pageNum,
     perPage: $perPage
