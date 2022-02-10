@@ -20,17 +20,7 @@
 <body>
     <div id="mapid"></div>
 </body>
-<script>
-    let myMap = L.map('mapid').setView([51.505, -0.09], 13);
-    let OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(myMap);
-    //let marker = L.marker([51.5, -0.09]).addTo(myMap);
-    //marker.bindPopup("hello, world!");
-
-    let popup = L.popup().setLatLng([51.5, -0.09]).setContent("standalone popup").openOn(myMap);
-
-</script>
+<!-- Must be after div with id mapid. -->
+<script src="map.js"></script>
 
 </html>
