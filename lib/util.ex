@@ -69,15 +69,18 @@ defmodule Util do
     |> Enum.map(fn sgg_data ->
       %{
         "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
-        "name" => sgg_data["name"],
+        "name" => sgg_data["name"] |> safen,
         "location" => %{
-          "lat" => sgg_data["lat"],
-          "lng" => sgg_data["lng"]
+          "lat" => sgg_data["lat"] |> safen,
+          "lng" => sgg_data["lng"] |> safen
         },
         "start_time" => sgg_data["startAt"],
         "end_time" => sgg_data["endAt"],
-        "url" => "https://smash.gg/" <> sgg_data["slug"]
+        "url" => "https://smash.gg/" <> (sgg_data["slug"] |> safen)
       }
     end)
   end
+
+  def safen(str), do: Phoenix.HTML.html_escape(str) |> Phoenix.HTML.safe_to_string
 end
+
