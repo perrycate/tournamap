@@ -1,4 +1,4 @@
-let myMap = L.map('mapid').setView([51.505, -0.09], 13);
+let myMap = L.map('mapid').setView([51.505, -0.09], 4);
 let OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -16,3 +16,7 @@ fetch("tournaments").then((resp) => {
     })
 });
 
+// Set position based on user location, if they grant it.
+navigator.geolocation.getCurrentPosition(resp => {
+    myMap.setView([resp.coords.latitude, resp.coords.longitude], 10);
+});
