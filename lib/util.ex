@@ -1,7 +1,8 @@
 defmodule Util do
   @auth_env_var "SMASH_GG_TOKEN"
+  @default_storage_file "tournaments.json"
 
-  def update_tourneys(filename) do
+  def update_tourneys(filename \\ @default_storage_file) do
     {:ok, tourneys} = get_all_tourneys()
     tourneys
     |> JSON.encode!
