@@ -1,19 +1,26 @@
 defmodule Util do
+  @auth_env_var "SMASH_GG_TOKEN"
+
   def update_tourneys(filename) do
-    get_all_tourneys()
+    {:ok, tourneys} = get_all_tourneys()
+    tourneys
     |> JSON.encode!
     |> then(&File.write!(filename, &1))
   end
 
   def get_all_tourneys do
-    auth = System.get_env("SMASH_GG_TOKEN")
-    # Rather than write code to figure out how many pages there are...
-    # let's just assume there are no more than 10 lol.
-    # (At time of writing there are less than 1,000 upcoming tournaments,
-    # which can easily fit in only 2 pages.)
-    1..10
-    |> Enum.map(&get_tourney_page(auth, &1))
-    |> List.flatten
+    case System.get_env(@auth_env_var) do
+      nil -> {:error, "No auth token specified. Make sure #{@auth_env_var} is set in the environment"}
+      auth ->
+        # Rather than write code to figure out how many pages there are...
+        # let's just assume there are no more than 10 lol.
+        # (At time of writing there are less than 1,000 upcoming tournaments,
+        # which can easily fit in only 2 pages.)
+        tourneys = 1..10
+                   |> Enum.map(&get_tourney_page(auth, &1))
+                   |> List.flatten
+        {:ok, tourneys}
+    end
   end
 
   def get_tourney_page(auth, page_num) do
@@ -83,4 +90,3 @@ defmodule Util do
 
   def safen(str), do: Phoenix.HTML.html_escape(str) |> Phoenix.HTML.safe_to_string
 end
-
