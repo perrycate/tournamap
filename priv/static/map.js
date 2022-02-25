@@ -14,7 +14,37 @@ fetch("tournaments").then((resp) => {
     })
 });
 
+// Sets loader and overlay while user responds to loacation prompt.
+let overlay = document.createElement("div");
+let loader = document.createElement("div");
+overlay.className = "overlay";
+loader.className = "loader";
+
+let mapContaner = document.getElementById('map-container');
+mapContaner.appendChild(overlay);
+mapContaner.appendChild(loader);
+
 // Set position based on user location, if they grant it.
-navigator.geolocation.getCurrentPosition(resp => {
+// Removes overlay and loader during success or failure.
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(setPositition, showError)
+    }
+    else {
+        alert("Please unable the browser to know your location or Geolocation is not supported by this browser.");
+    }
+}
+
+function setPositition(resp) {
     myMap.setView([resp.coords.latitude, resp.coords.longitude], 10);
-});
+    mapContaner.removeChild(overlay);
+    mapContaner.removeChild(loader);
+}
+
+function showError() {
+    console.log("Location denied.");
+    mapContaner.removeChild(overlay);
+    mapContaner.removeChild(loader);
+}
+
+getLocation();
