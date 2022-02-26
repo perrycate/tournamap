@@ -30,3 +30,6 @@ notes.md
 
 # Dumped data from smash.gg
 tournaments.json
+
+# env file
+.env
