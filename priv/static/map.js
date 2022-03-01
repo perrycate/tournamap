@@ -8,7 +8,7 @@ fetch("tournaments").then((resp) => {
     resp.json().then((parsed_tourneys) => {
         let tourney_markers = parsed_tourneys.map((tourney) => {
             let { lat, lng } = tourney["location"];
-            return L.marker().setLatLng([lat, lng]).bindPopup(`<a href=${tourney["url"]}>${tourney["name"]}</a>`);
+            return L.marker().setLatLng([lat, lng]).bindPopup(`<a href=${tourney["url"]} target="_blank">${tourney["name"]}</a>`);
         });
         L.layerGroup(tourney_markers).addTo(myMap);
     })
