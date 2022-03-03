@@ -1,3 +1,4 @@
+"use strict";
 let myMap = L.map("mapid").setView([51.505, -0.09], 4);
 let OpenStreetMap_Mapnik = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
