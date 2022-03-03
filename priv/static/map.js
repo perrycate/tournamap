@@ -1,5 +1,5 @@
-let myMap = L.map('mapid').setView([51.505, -0.09], 4);
-let OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+let myMap = L.map("mapid").setView([51.505, -0.09], 4);
+let OpenStreetMap_Mapnik = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
@@ -20,7 +20,7 @@ let loader = document.createElement("div");
 overlay.className = "overlay";
 loader.className = "loader";
 
-let mapContaner = document.getElementById('map-container');
+let mapContaner = document.getElementById("map-container");
 mapContaner.appendChild(overlay);
 mapContaner.appendChild(loader);
 
