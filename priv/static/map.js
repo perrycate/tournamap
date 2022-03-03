@@ -10,7 +10,7 @@ fetch("tournaments").then((resp) => {
     resp.json().then((parsed_tourneys) => {
         let tourney_markers = parsed_tourneys.map((tourney) => {
             let { lat, lng } = tourney["location"];
-            return L.marker().setLatLng([lat, lng]).bindPopup(`<a href=${tourney["url"]} target="_blank">${tourney["name"]}</a>`);
+            return L.marker().setLatLng([lat, lng]).bindPopup(popupFor(tourney));
         });
         L.layerGroup(tourney_markers).addTo(myMap);
     })
@@ -45,4 +45,14 @@ function showError() {
     console.log("Location denied.");
     mapContainer.removeChild(overlay);
     mapContainer.removeChild(loader);
+}
+
+// Returns a string containing the html code that should be embedded in a leaflet
+// map popup for a particular tourney.
+function popupFor(tourney) {
+    console.log(tourney["start_time"])
+    return `
+<h2><a href=${tourney["url"]} target="_blank">${tourney["name"]}</a></h2>
+<p>${new Date(tourney["start_time"] * 1000).toLocaleString()}</p>
+`
 }
