@@ -5,6 +5,7 @@ let OpenStreetMap_Mapnik = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
 
+// Fetch tournament data and add pins to the map for each tournament.
 fetch("tournaments").then((resp) => {
     resp.json().then((parsed_tourneys) => {
         let tourney_markers = parsed_tourneys.map((tourney) => {
@@ -15,15 +16,15 @@ fetch("tournaments").then((resp) => {
     })
 });
 
-// Sets loader and overlay while user responds to loacation prompt.
+// Sets loader and overlay while user responds to location prompt.
 let overlay = document.createElement("div");
 let loader = document.createElement("div");
 overlay.className = "overlay";
 loader.className = "loader";
 
-let mapContaner = document.getElementById("map-container");
-mapContaner.appendChild(overlay);
-mapContaner.appendChild(loader);
+let mapContainer = document.getElementById("map-container");
+mapContainer.appendChild(overlay);
+mapContainer.appendChild(loader);
 
 // Set position based on user location, if they grant it.
 // Removes overlay and loader during success or failure.
@@ -36,12 +37,12 @@ else {
 
 function setPosition(resp) {
     myMap.setView([resp.coords.latitude, resp.coords.longitude], 10);
-    mapContaner.removeChild(overlay);
-    mapContaner.removeChild(loader);
+    mapContainer.removeChild(overlay);
+    mapContainer.removeChild(loader);
 }
 
 function showError() {
     console.log("Location denied.");
-    mapContaner.removeChild(overlay);
-    mapContaner.removeChild(loader);
+    mapContainer.removeChild(overlay);
+    mapContainer.removeChild(loader);
 }
