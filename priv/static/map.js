@@ -26,16 +26,14 @@ mapContaner.appendChild(loader);
 
 // Set position based on user location, if they grant it.
 // Removes overlay and loader during success or failure.
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(setPositition, showError)
-    }
-    else {
-        alert("Please unable the browser to know your location or Geolocation is not supported by this browser.");
-    }
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(setPosition, showError)
+}
+else {
+    alert("Please unable the browser to know your location or Geolocation is not supported by this browser.");
 }
 
-function setPositition(resp) {
+function setPosition(resp) {
     myMap.setView([resp.coords.latitude, resp.coords.longitude], 10);
     mapContaner.removeChild(overlay);
     mapContaner.removeChild(loader);
@@ -46,5 +44,3 @@ function showError() {
     mapContaner.removeChild(overlay);
     mapContaner.removeChild(loader);
 }
-
-getLocation();
