@@ -32,7 +32,7 @@ if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(setPosition, showError)
 }
 else {
-    alert("Please unable the browser to know your location or Geolocation is not supported by this browser.");
+    alert("Please enable the browser to know your location or Geolocation is not supported by this browser.");
 }
 
 function setPosition(resp) {
