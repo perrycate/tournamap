@@ -32,6 +32,8 @@ mix trot.server
 ```
 
 By default the server runs on port `4000`, so you can access the site at `http://localhost:4000/index.html`.
+Be certain that you're using `localhost` and not `127.0.0.1`.
+The tile provider (used for the maps) will only work if the request is coming from "localhost".
 
 
 ## Contributing
