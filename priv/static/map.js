@@ -6,7 +6,7 @@ let OpenStreetMap_Mapnik = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/
 }).addTo(myMap);
 
 // Fetch tournament data and add pins to the map for each tournament.
-fetch("tournaments").then((resp) => {
+fetch("tournaments.json").then((resp) => {
     resp.json().then((parsed_tourneys) => {
         let tourney_markers = parsed_tourneys.map((tourney) => {
             let { lat, lng } = tourney["location"];

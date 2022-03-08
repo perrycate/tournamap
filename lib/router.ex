@@ -3,7 +3,7 @@ defmodule TournaMap.Router do
 
   static "/" # Serve everything in priv/static as-is.
 
-  get "/tournaments" do
+  get "/tournaments.json" do
     File.read!("tournaments.json") |> JSON.decode! # Lol.
   end
 
