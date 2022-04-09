@@ -26,7 +26,8 @@ let loader = document.createElement("div");
 overlay.className = "overlay";
 loader.className = "loader";
 
-let mapContainer = document.getElementById("map-container");
+let mapContainer = document.getElementById("mapid");
+console.log(mapContainer);
 mapContainer.appendChild(overlay);
 mapContainer.appendChild(loader);
 
