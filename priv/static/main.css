@@ -3,12 +3,19 @@
   margin: 0;
 }
 
+nav {
+  background-color: #263d42;
+}
+
 body {
   height: 100vh; /* Web page should take up the whole screen, and never scroll past it. */
 }
 
-li {
+.navbar {
   display: inline-block;
+  color: #fff;
+  padding: 0.2em;
+  font-family: Arial;
 }
 
 .container {
