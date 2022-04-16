@@ -11,6 +11,10 @@ body {
   height: 100vh; /* Web page should take up the whole screen, and never scroll past it. */
 }
 
+ol {
+  padding-left: 1rem;
+}
+
 .navbar {
   display: inline-block;
   color: #fff;
@@ -23,10 +27,20 @@ body {
   flex-direction: column;
 }
 
-#mapid {
+#main {
   flex-grow: 1;
   z-index: 1;
   display: flex;
+}
+
+#about {
+  max-width: 30rem;
+  padding: 0.5rem;
+}
+
+#map {
+  flex-grow: 1;
+  display: flex; /* Needed for the spinning loady thingy to be centered. */
 }
 
 /* Gray overlay / spinning loader while map loads. */

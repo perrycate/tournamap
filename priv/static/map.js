@@ -1,5 +1,5 @@
 "use strict";
-let myMap = L.map("mapid", {
+let myMap = L.map("map", {
     worldCopyJump: true,
 }).setView([51.505, -0.09], 4);
 let OpenStreetMap_Mapnik = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ3JhdmlkZGQiLCJhIjoiY2wwZDh3eDE2MDZ1OTNrcGYybjhsNmN2diJ9.cPvRZK6WTt_wjQSa-DzblQ", {
