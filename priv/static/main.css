@@ -31,11 +31,15 @@ ol {
   flex-grow: 1;
   z-index: 1;
   display: flex;
+
+  /* Without this, flexbox will override the min-height to auto, and main would exceed the bounds of the viewport (cause scrolling), which we don't want. */
+  min-height: 0;
 }
 
 #about {
   max-width: 30rem;
   padding: 0.5rem;
+  overflow-y: scroll;
 }
 
 #map {
