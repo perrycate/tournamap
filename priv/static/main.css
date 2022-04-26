@@ -17,9 +17,17 @@ ol {
 
 .navbar {
   display: inline-block;
-  color: #fff;
   padding: 0.2em;
   font-family: Arial;
+}
+
+.navbar a {
+  text-decoration: none;
+}
+
+.navbar,
+.navbar a {
+  color: #fff;
 }
 
 .container {
