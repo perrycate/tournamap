@@ -27,6 +27,10 @@ ol {
   flex-direction: column;
 }
 
+.hidden {
+  display: none;
+}
+
 #main {
   z-index: 1;
   display: flex;
