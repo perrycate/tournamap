@@ -31,8 +31,15 @@ ol {
   z-index: 1;
   display: flex;
 
-  /* Without this, flexbox will override the min-height to auto, and main would exceed the bounds of the viewport (cause scrolling), which we don't want. */
+  /* Without this, flexbox will override the min-height to auto, and main
+   would exceed the bounds of the viewport (cause scrolling), which we don't
+   want. */
   min-height: 0;
+  /* Take up all available space.
+   This has no effect if children of main (ie #about) have some fixed
+   height, but if said children are not present in the DOM, main would
+   otherwize shrink to a height of 0, hiding the map. */
+  flex-grow: 1;
 }
 
 #about {
