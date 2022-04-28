@@ -26,35 +26,30 @@ fetch("tournaments.json").then((resp) => {
   });
 });
 
-// Sets loader and overlay while user responds to location prompt.
+// Set loader and overlay while user responds to location prompt.
+let mapContainer = document.getElementById(MAP_CONTAINER_ID);
 let overlay = document.createElement("div");
 let loader = document.createElement("div");
 overlay.className = "overlay";
 loader.className = "loader";
-
-let mapContainer = document.getElementById(MAP_CONTAINER_ID);
 mapContainer.appendChild(overlay);
 mapContainer.appendChild(loader);
 
-// Set position based on user location, if they grant it.
-// Removes overlay and loader during success or failure.
+// Set map position based on user location, if they grant it.
 if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(setPosition, showError);
+  navigator.geolocation.getCurrentPosition(
+    // Success.
+    (resp) => myMap.setView([resp.coords.latitude, resp.coords.longitude], 10),
+    // Failure.
+    () => console.log("Location denied by user.")
+  );
 } else {
   alert("Please enable the browser to know your location or Geolocation is not supported by this browser.");
 }
 
-function setPosition(resp) {
-  myMap.setView([resp.coords.latitude, resp.coords.longitude], 10);
-  mapContainer.removeChild(overlay);
-  mapContainer.removeChild(loader);
-}
-
-function showError() {
-  console.log("Location denied.");
-  mapContainer.removeChild(overlay);
-  mapContainer.removeChild(loader);
-}
+// Remove the overlay even if location stuff failed so the user can still use the site.
+mapContainer.removeChild(overlay);
+mapContainer.removeChild(loader);
 
 // Returns a string containing the html code that should be embedded in a leaflet
 // map popup for a particular tourney.
