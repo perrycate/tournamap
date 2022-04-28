@@ -19,6 +19,7 @@ ol {
   display: inline-block;
   padding: 0.2em;
   font-family: Arial;
+  cursor: pointer;
 }
 
 .navbar a {
