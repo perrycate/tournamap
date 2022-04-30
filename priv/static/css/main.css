@@ -63,6 +63,11 @@ ol {
   overflow-y: scroll;
 }
 
+.about-section,
+#about-footer {
+  margin-top: 1rem;
+}
+
 #map {
   flex-grow: 1;
   display: flex; /* Needed for the spinning loady thingy to be centered. */
