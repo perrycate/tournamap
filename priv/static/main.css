@@ -44,9 +44,11 @@ ol {
   z-index: 1;
   display: flex;
 
-  /* Without this, flexbox will override the min-height to auto, and main
-   would exceed the bounds of the viewport (cause scrolling), which we don't
-   want. */
+  /*
+  This is required
+  to prevent flexbox default
+  of min-height auto.
+  */
   min-height: 0;
   /* Take up all available space.
    This has no effect if children of main (ie #about) have some fixed
