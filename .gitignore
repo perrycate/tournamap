@@ -29,7 +29,8 @@ tournamap-*.tar
 notes.md
 
 # Dumped data from smash.gg.
-tournaments.json
+# (It will still be tracked outside of the base folder.)
+/tournaments.json
 
 # Node deps.
 node_modules

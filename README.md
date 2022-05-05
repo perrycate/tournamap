@@ -4,15 +4,36 @@
 
 ## Installation and usage
 
-Your system must have Elixir (recommended 1.12 or greater) and Mix installed.
+### Frontend
 
-After cloning/downloading the repo and `cd`ing into it:
+The frontend comes with a sample tournaments.json file already downloaded/created.
+If you are only interested in running frontend and are ok with stale tournament data, here are the steps to get it running.
+
+Your system must have npm installed.
+
+Install dependencies:
+
+```
+npm install
+```
+
+Start the server:
+
+```
+npm start
+```
+
+Be certain that you're using `localhost` to access the site in your browser and not `127.0.0.1`.
+The tile provider (used for the maps) will only work if the request is coming from "localhost".
+
+### Data Fetching / "Backend"
+
+Your system must have Elixir (recommended 1.12 or greater) and Mix installed.
 
 Install dependencies:
 
 ```
 mix deps.get
-npm install
 ```
 
 Get a smash.gg auth token by following the instructions [here](https://developer.smash.gg/docs/authentication).
@@ -26,23 +47,18 @@ Download tournaments:
 
 ```
 mix run -e Util.update_tourneys
-cp tournaments.json publi/
 ```
 
-Start the server:
+If you wish to see the updated data in the frontend, copy the newly-created `tournaments.json` file into the `public` folder before following the frontend setup instructions above:
 
 ```
-npm start
+cp tournaments.json public/
 ```
-
-By default the server runs on port `4000`, so you can access the site at `http://localhost:4000/index.html`.
-Be certain that you're using `localhost` and not `127.0.0.1`.
-The tile provider (used for the maps) will only work if the request is coming from "localhost".
 
 ## Contributing
 
-Frontend code is located in `priv/static`.
-"Backend" (ie the one-off code to download tournaments and save as a json file) is in `lib/`.
+Static files are located in `/public`, react components are in `/src`.
+The "Backend" (ie the one-off code to download tournaments and save as a json file) is in `lib/`.
 Tournament fetching code exists in `lib/util.ex`.
 
 The code is a mess, sorry.
