@@ -1,6 +1,32 @@
 # Tournamap
 
-**TODO: Add description**
+Tournamap.gg is a site for visualizing the location of offline video game tournaments. (Only Smash Ultimate is
+supported so far.) Each pin represents an upcoming tournament, click on it for details.
+
+![Image of a map with pins. One of the pins is displaying information about a tournament](/example.png | width=100)
+
+### Why did I make this?
+
+~~I was bored idk~~
+"Any tournaments happening near **\_**?" is a very common question in my community (NorCal). Some crazy
+individuals, in response, handmade and maintained a map showing where the locals are and when they happen. I
+thought that was awesome, and decided to try to automate something similar.
+
+### Data Source(s)
+
+Data is pulled from [smash.gg](https://smash.gg/) roughly every half hour. We hope to eventually
+support other sources, such as challonge.
+
+### If your tournament isn't listed
+
+Make sure your tournament listing is publicly visible and discoverable. Someone should be able to find the
+page from the internet without being logged in.
+
+If your tournament was recently published, try waiting an hour. The data is updated every half hour, but it
+may take some time for the updated data to become visible.
+
+If all else fails, email [admin@tournamap.gg]("mailto:admin@tournamap.gg") with a link to your
+tournament so we can figure out why it isn't being shown.
 
 ## Installation and usage
 
@@ -55,7 +81,7 @@ If you wish to see the updated data in the frontend, copy the newly-created `tou
 cp tournaments.json public/
 ```
 
-## Contributing
+### Contributing
 
 Static files are located in `/public`, react components are in `/src`.
 The "Backend" (ie the one-off code to download tournaments and save as a json file) is in `lib/`.
