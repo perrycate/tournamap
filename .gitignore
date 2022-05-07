@@ -34,3 +34,6 @@ notes.md
 
 # Node deps.
 node_modules
+
+# Node build folder.
+/build/
