@@ -3,7 +3,7 @@
 Tournamap.gg is a site for visualizing the location of offline video game tournaments. (Only Smash Ultimate is
 supported so far.) Each pin represents an upcoming tournament, click on it for details.
 
-![Image of a map with pins. One of the pins is displaying information about a tournament](/example.png | width=100)
+![Image of a map with pins. One of the pins is displaying information about a tournament](/example.png)
 
 ### Why did I make this?
 
