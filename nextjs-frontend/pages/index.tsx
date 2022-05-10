@@ -1,15 +1,8 @@
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import {
-  AnchorHTMLAttributes,
-  DetailedHTMLProps,
-  FC,
-  HTMLAttributes,
-  memo,
-  useEffect,
-  useState,
-} from "react";
+
+import { FC, memo, useEffect, useState } from "react";
 import { z } from "zod";
 import ReactDiv100vh from "react-div-100vh";
 
@@ -17,12 +10,25 @@ const LOCATION_CACHE_KEY = "userLatLng";
 const LAT_LNG_SCHEMA = z.tuple([z.number(), z.number()]);
 const TOURNAMENT_JSON = z.array(
   z.object({
-    location: z.object({
-      lat: z.string(),
-      lng: z.string(),
-    }),
+    end_time: z.number(),
+    external_id: z.string(),
+    location: z.object({ lat: z.string(), lng: z.string() }),
+    name: z.string(),
+    start_time: z.number(),
+    url: z.string(),
   })
 );
+export type TournamentType = {
+  end_time: number;
+  external_id: string;
+  location: {
+    lat: string;
+    lng: string;
+  };
+  name: string;
+  start_time: number;
+  url: string;
+};
 
 const StatefulMap: FC = () => {
   const MapWithNoSSR = dynamic(() => import("../components/Map"), {
@@ -51,7 +57,7 @@ const StatefulMap: FC = () => {
       }
     }
   }
-  let [markers, setMarkers] = useState([initial_location]);
+  let [tournaments, setTournaments] = useState<TournamentType[]>([]);
   let [location, setLocation] = useState(initial_location);
   useEffect(() => {
     const fetchData = async () => {
@@ -62,12 +68,7 @@ const StatefulMap: FC = () => {
         console.log(respJson);
         return;
       }
-      const newMarkers = parsedResp.data.map((tourney): [number, number] => {
-        const { lat, lng } = tourney.location;
-        return [Number(lat), Number(lng)];
-      });
-      console.log("new markers", newMarkers);
-      setMarkers(newMarkers);
+      setTournaments(parsedResp.data);
     };
     const fetchLocation = async () => {
       const positionPromise = new Promise<[number, number]>(
@@ -97,63 +98,35 @@ const StatefulMap: FC = () => {
     fetchData();
     fetchLocation();
   }, []);
-  return <MapWithNoSSR location={location} markers={markers} />;
+  return <MapWithNoSSR location={location} tournaments={tournaments} />;
 };
 
 const StatefulMapMemoized = memo(StatefulMap);
 
-const AboutH2: FC<
-  DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>
-> = ({ children, ...rest }) => {
-  return (
-    <h2
-      className="font-semibold tracking-tighter leading-10 text-2xl"
-      {...rest}
-    >
-      {children}
-    </h2>
-  );
-};
-
-const AboutLink: FC<
-  DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
-> = ({ children, ...rest }) => {
-  return (
-    <a
-      className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
-      {...rest}
-    >
-      {children}
-    </a>
-  );
-};
-
 const AboutContent: FC = () => {
   return (
     <>
-      <AboutH2>About this Site</AboutH2>
+      <h3>About this Site</h3>
       <p>
         Tournamap.gg is a site for visualizing the location of offline video
         game tournaments. (Only Smash Ultimate is supported so far.) Each pin
         represents an upcoming tournament, click on it for details.
       </p>
-      <AboutH2>Why did I make this?</AboutH2>
+      <h3>Why did I make this?</h3>
       <p>
-        <s>I was bored idk</s>
-        "Any tournaments happening near _____?" is a very common question in my
-        community (NorCal). Some crazy individuals, in response, handmade and
-        maintained a map showing where the locals are and when they happen. I
-        thought that was awesome, and decided to try to automate something
-        similar.
+        <s>I was bored idk</s> "Any tournaments happening near _____?" is a very
+        common question in my community (NorCal). Some crazy individuals, in
+        response, handmade and maintained a map showing where the locals are and
+        when they happen. I thought that was awesome, and decided to try to
+        automate something similar.
       </p>
-      <AboutH2>Data Source(s)</AboutH2>
+      <h3>Data Source(s)</h3>
       <p>
-        Data is pulled from{" "}
-        <AboutLink href="https://smash.gg/">smash.gg</AboutLink> roughly every
-        half hour. We hope to eventually support other sources, such as
+        Data is pulled from <a href="https://smash.gg/">smash.gg</a> roughly
+        every half hour. We hope to eventually support other sources, such as
         challonge.
       </p>
-      <AboutH2>If your tournament isn't listed</AboutH2>
+      <h3>If your tournament isn't listed</h3>
       <ol className="list-decimal ml-4 ">
         <li>
           Make sure your tournament listing is publicly visible and
@@ -167,25 +140,20 @@ const AboutContent: FC = () => {
         </li>
         <li>
           If all else fails, email{" "}
-          <AboutLink href="mailto:admin@tournamap.gg">
-            admin@tournamap.gg
-          </AboutLink>{" "}
-          with a link to your tournament so we can figure out why it isn't being
-          shown.
+          <a href="mailto:admin@tournamap.gg">admin@tournamap.gg</a> with a link
+          to your tournament so we can figure out why it isn't being shown.
         </li>
       </ol>
-      <AboutH2>How to contribute</AboutH2>
+      <h3>How to contribute</h3>
       The source code for the project can be found{" "}
-      <AboutLink href="https://github.com/perrycate/tournamap">
-        on GitHub
-      </AboutLink>
+      <a href="https://github.com/perrycate/tournamap">on GitHub</a>
       . All forms of contribution (code, comments, etc) are welcome!
       <br />
       <br />I stream most Mondays, Wednesdays, and Fridays around 6:30 Pacific /
       9:30 Eastern while working on the site.{" "}
-      <AboutLink href="https://twitch.tv/graviddd">
+      <a href="https://twitch.tv/graviddd">
         Come watch and/or chat and/or help!
-      </AboutLink>
+      </a>
       {/* TODO once we have a feedback form, mention it here. */}
     </>
   );
@@ -212,14 +180,14 @@ const Home: NextPage = () => {
           </li>
         </ul>
       </nav>
-      <div id="main" className="flex-1 flex text-sm">
-        <section
+      <div id="main" className="flex-1 flex min-h-0 text-sm">
+        <article
           id="about"
           hidden={hideAbout}
-          className="max-w-lg p-2 overflow-y-scroll"
+          className="max-w-lg overflow-y-auto prose p-3"
         >
           <AboutContent />
-        </section>
+        </article>
         <StatefulMapMemoized />
       </div>
     </ReactDiv100vh>

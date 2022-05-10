@@ -18,4 +18,6 @@ npm install react-leaflet
 npm install -D @types/leaflet
 npm install zod
 npm install leaflet-defaulticon-compatibility
+npm i react-div-100vh
+npm install -D @tailwindcss/typography
 ```
