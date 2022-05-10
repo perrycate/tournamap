@@ -3,17 +3,16 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
-
-import { TournamentType } from "../pages";
+import { TournamentType } from "./StatefulMapMemoized";
 
 const DEFAULT_ZOOM_LEVEL = 10;
 
 interface MapProps {
-  location: [number, number];
+  location: [number, number] | null;
   tournaments: TournamentType[];
 }
 const Map: FC<MapProps> = ({ location, tournaments }) => {
-  return (
+  return location ? (
     <MapContainer
       center={location}
       zoom={DEFAULT_ZOOM_LEVEL}
@@ -46,7 +45,7 @@ const Map: FC<MapProps> = ({ location, tournaments }) => {
             <a
               href={tourney.url}
               target="_blank"
-              className="underline text-blue-900 hover:text-blue-800 visited:text-purple-600 font-semibold text-lg leading-6"
+              className="underline hover:text-blue-800 visited:text-purple-600 font-semibold text-lg leading-6"
             >
               {tourney.name}
             </a>
@@ -55,6 +54,12 @@ const Map: FC<MapProps> = ({ location, tournaments }) => {
         </Marker>
       ))}
     </MapContainer>
+  ) : (
+    <>
+      <div className="overlay z-[1200] flex-1 flex bg-[rgba(0,0,0,0.5)]">
+        <div className="loader"></div>
+      </div>
+    </>
   );
 };
 export default Map;
