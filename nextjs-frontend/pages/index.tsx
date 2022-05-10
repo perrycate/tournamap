@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { FC, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import { z } from "zod";
 
 const LOCATION_CACHE_KEY = "userLatLng";
@@ -90,6 +90,8 @@ const StatefulMap: FC = () => {
   }, []);
   return <MapWithNoSSR location={location} markers={markers} />;
 };
+
+const StatefulMapMemoized = memo(StatefulMap);
 
 const AboutContent: FC = () => {
   return (
@@ -181,7 +183,7 @@ const Home: NextPage = () => {
           >
             Mapbox
           </a>
-          <StatefulMap />
+          <StatefulMapMemoized />
         </section>
       </div>
     </div>
