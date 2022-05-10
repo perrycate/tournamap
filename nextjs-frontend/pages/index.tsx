@@ -1,7 +1,15 @@
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { FC, memo, useEffect, useState } from "react";
+import {
+  AnchorHTMLAttributes,
+  DetailedHTMLProps,
+  FC,
+  HTMLAttributes,
+  memo,
+  useEffect,
+  useState,
+} from "react";
 import { z } from "zod";
 
 const LOCATION_CACHE_KEY = "userLatLng";
@@ -93,16 +101,39 @@ const StatefulMap: FC = () => {
 
 const StatefulMapMemoized = memo(StatefulMap);
 
+const AboutH2: FC<
+  DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>
+> = ({ children, ...rest }) => {
+  return (
+    <h2 className="font-semibold tracking-tighter leading-10 text-2xl" {...rest}>
+      {children}
+    </h2>
+  );
+};
+
+const AboutLink: FC<
+  DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
+> = ({ children, ...rest }) => {
+  return (
+    <a
+      className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+      {...rest}
+    >
+      {children}
+    </a>
+  );
+};
+
 const AboutContent: FC = () => {
   return (
     <>
-      <h2>About this Site</h2>
+      <AboutH2>About this Site</AboutH2>
       <p>
         Tournamap.gg is a site for visualizing the location of offline video
         game tournaments. (Only Smash Ultimate is supported so far.) Each pin
         represents an upcoming tournament, click on it for details.
       </p>
-      <h2>Why did I make this?</h2>
+      <AboutH2>Why did I make this?</AboutH2>
       <p>
         <s>I was bored idk</s>
         "Any tournaments happening near _____?" is a very common question in my
@@ -111,14 +142,15 @@ const AboutContent: FC = () => {
         thought that was awesome, and decided to try to automate something
         similar.
       </p>
-      <h2>Data Source(s)</h2>
+      <AboutH2>Data Source(s)</AboutH2>
       <p>
-        Data is pulled from <a href="https://smash.gg/">smash.gg</a> roughly
-        every half hour. We hope to eventually support other sources, such as
+        Data is pulled from{" "}
+        <AboutLink href="https://smash.gg/">smash.gg</AboutLink> roughly every
+        half hour. We hope to eventually support other sources, such as
         challonge.
       </p>
-      <h2>If your tournament isn't listed</h2>
-      <ol>
+      <AboutH2>If your tournament isn't listed</AboutH2>
+      <ol className="list-decimal ml-4 ">
         <li>
           Make sure your tournament listing is publicly visible and
           discoverable. Someone should be able to find the page from the
@@ -131,20 +163,25 @@ const AboutContent: FC = () => {
         </li>
         <li>
           If all else fails, email{" "}
-          <a href="mailto:admin@tournamap.gg">admin@tournamap.gg </a> with a
-          link to your tournament so we can figure out why it isn't being shown.
+          <AboutLink href="mailto:admin@tournamap.gg">
+            admin@tournamap.gg
+          </AboutLink>{" "}
+          with a link to your tournament so we can figure out why it isn't being
+          shown.
         </li>
       </ol>
-      <h2>How to contribute</h2>
+      <AboutH2>How to contribute</AboutH2>
       The source code for the project can be found{" "}
-      <a href="https://github.com/perrycate/tournamap">on GitHub</a>. All forms
-      of contribution (code, comments, etc) are welcome!
+      <AboutLink href="https://github.com/perrycate/tournamap">
+        on GitHub
+      </AboutLink>
+      . All forms of contribution (code, comments, etc) are welcome!
       <br />
       <br />I stream most Mondays, Wednesdays, and Fridays around 6:30 Pacific /
-      9:30 Eastern while working on the site.
-      <a href="https://twitch.tv/graviddd">
+      9:30 Eastern while working on the site.{" "}
+      <AboutLink href="https://twitch.tv/graviddd">
         Come watch and/or chat and/or help!
-      </a>
+      </AboutLink>
       {/* TODO once we have a feedback form, mention it here. */}
     </>
   );
@@ -171,8 +208,12 @@ const Home: NextPage = () => {
           </li>
         </ul>
       </nav>
-      <div id="main" className="flex">
-        <section id="about" hidden={hideAbout} className="max-w-lg p-2">
+      <div id="main" className="flex text-sm">
+        <section
+          id="about"
+          hidden={hideAbout}
+          className="max-w-lg p-2 overflow-y-scroll"
+        >
           <AboutContent />
         </section>
         <StatefulMapMemoized />

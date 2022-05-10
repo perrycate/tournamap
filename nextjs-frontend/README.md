@@ -6,6 +6,7 @@
 - https://stackoverflow.com/questions/60386389/react-usestate-setters-causing-re-render.
   The map would flash when I clicked on the About button.
   This can be avoided with `React.memo`.
+- https://stackoverflow.com/questions/63883580/tailwind-css-how-to-style-a-href-links-in-react
 
 ## Commands
 
