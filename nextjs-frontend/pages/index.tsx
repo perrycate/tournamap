@@ -153,7 +153,7 @@ const AboutContent: FC = () => {
 const Home: NextPage = () => {
   const [hideAbout, setHideAbout] = useState(true);
   return (
-    <div>
+    <>
       <Head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -161,8 +161,8 @@ const Home: NextPage = () => {
         <title>Tournamap</title>
         <link rel="icon" type="image/x-icon" href="icon-cropped.png" />
       </Head>
-      <nav>
-        <ul>
+      <nav className="bg-teal-900">
+        <ul className="flex text-white space-x-4">
           <li>
             <a href="/">tournamap.gg</a>
           </li>
@@ -171,22 +171,13 @@ const Home: NextPage = () => {
           </li>
         </ul>
       </nav>
-      <div id="main">
-        <section id="about" hidden={hideAbout}>
+      <div id="main" className="flex">
+        <section id="about" hidden={hideAbout} className="max-w-lg p-2">
           <AboutContent />
         </section>
-        <section id="map">
-          <a
-            href="http://mapbox.com/about/maps"
-            className="mapbox-logo"
-            target="_blank"
-          >
-            Mapbox
-          </a>
-          <StatefulMapMemoized />
-        </section>
+        <StatefulMapMemoized />
       </div>
-    </div>
+    </>
   );
 };
 

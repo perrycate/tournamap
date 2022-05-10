@@ -16,8 +16,15 @@ const Map: FC<MapProps> = ({ location, markers }) => {
       center={location}
       zoom={DEFAULT_ZOOM_LEVEL}
       worldCopyJump={true}
-      className="absolute top-0 left-0 bottom-0 right-0 -z-50"
+      className="flex-1"
     >
+      <a
+        href="http://mapbox.com/about/maps"
+        className="mapbox-logo"
+        target="_blank"
+      >
+        Mapbox
+      </a>
       <TileLayer
         maxZoom={14}
         minZoom={3}
