@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { z } from "zod";
+import ReactDiv100vh from "react-div-100vh";
 
 const LOCATION_CACHE_KEY = "userLatLng";
 const LAT_LNG_SCHEMA = z.tuple([z.number(), z.number()]);
@@ -105,7 +106,10 @@ const AboutH2: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>
 > = ({ children, ...rest }) => {
   return (
-    <h2 className="font-semibold tracking-tighter leading-10 text-2xl" {...rest}>
+    <h2
+      className="font-semibold tracking-tighter leading-10 text-2xl"
+      {...rest}
+    >
       {children}
     </h2>
   );
@@ -190,7 +194,7 @@ const AboutContent: FC = () => {
 const Home: NextPage = () => {
   const [hideAbout, setHideAbout] = useState(true);
   return (
-    <>
+    <ReactDiv100vh className="flex flex-col">
       <Head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -208,7 +212,7 @@ const Home: NextPage = () => {
           </li>
         </ul>
       </nav>
-      <div id="main" className="flex text-sm">
+      <div id="main" className="flex-1 flex text-sm">
         <section
           id="about"
           hidden={hideAbout}
@@ -218,7 +222,7 @@ const Home: NextPage = () => {
         </section>
         <StatefulMapMemoized />
       </div>
-    </>
+    </ReactDiv100vh>
   );
 };
 
