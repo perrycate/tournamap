@@ -7,6 +7,7 @@
   The map would flash when I clicked on the About button.
   This can be avoided with `React.memo`.
 - https://stackoverflow.com/questions/63883580/tailwind-css-how-to-style-a-href-links-in-react
+- https://nextjs.org/blog/markdown
 
 ## Commands
 
@@ -20,4 +21,6 @@ npm install zod
 npm install leaflet-defaulticon-compatibility
 npm i react-div-100vh
 npm install -D @tailwindcss/typography
+npm install --save-dev @types/node
+npm install next-mdx-remote
 ```

@@ -1,11 +1,24 @@
-import type { NextPage } from "next";
+import { readFileSync } from "fs";
+import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import ReactDiv100vh from "react-div-100vh";
-import AboutContent from "../components/AboutContent";
 import StatefulMapMemoized from "../components/StatefulMapMemoized";
+import { serialize } from "next-mdx-remote/serialize";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 
-const Home: NextPage = () => {
+interface Props {
+  aboutMdxSource: MDXRemoteSerializeResult<Record<string, unknown>>;
+}
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const aboutText = readFileSync("./assets/about.mdx", {
+    encoding: "utf8",
+  });
+  const aboutMdxSource = await serialize(aboutText);
+  return { props: { aboutMdxSource } };
+};
+
+const Home: NextPage<Props> = ({ aboutMdxSource }) => {
   const [hideAbout, setHideAbout] = useState(true);
   return (
     <ReactDiv100vh className="flex flex-col">
@@ -36,9 +49,9 @@ const Home: NextPage = () => {
         <article
           id="about"
           hidden={hideAbout}
-          className="max-w-lg p-3 overflow-y-auto prose-sm prose prose-blue"
+          className="max-w-lg p-3 overflow-y-auto prose-sm prose prose-headings:my-3 first:prose-headings:mt-0 prose-blue"
         >
-          <AboutContent />
+          <MDXRemote {...aboutMdxSource} />
         </article>
         <div className="relative flex flex-1">
           <StatefulMapMemoized />
