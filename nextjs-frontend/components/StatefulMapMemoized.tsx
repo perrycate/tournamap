@@ -80,9 +80,6 @@ const StatefulMap: FC = () => {
                 resolve([resp.coords.latitude, resp.coords.longitude]);
               },
               (error) => {
-                alert(
-                  "Please enable the browser to know your location or Geolocation is not supported by this browser."
-                );
                 reject(error);
               }
             );
