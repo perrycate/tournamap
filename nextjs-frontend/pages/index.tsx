@@ -1,8 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-
 import { useState } from "react";
-
 import ReactDiv100vh from "react-div-100vh";
 import AboutContent from "../components/AboutContent";
 import StatefulMapMemoized from "../components/StatefulMapMemoized";
@@ -19,24 +17,30 @@ const Home: NextPage = () => {
         <link rel="icon" type="image/x-icon" href="icon-cropped.png" />
       </Head>
       <nav className="bg-teal-900">
-        <ul className="flex text-white space-x-4">
-          <li>
-            <a href="/">tournamap.gg</a>
+        <ul className="flex items-center text-white">
+          <li className="flex hover:bg-teal-800">
+            <a href="/" className="flex-1 p-2">
+              tournamap.gg
+            </a>
           </li>
-          <li id="about-btn" onClick={() => setHideAbout((value) => !value)}>
+          <li
+            id="about-btn"
+            onClick={() => setHideAbout((value) => !value)}
+            className="p-2 cursor-pointer select-none hover:bg-teal-800"
+          >
             About
           </li>
         </ul>
       </nav>
-      <div id="main" className="flex-1 flex min-h-0 text-sm">
+      <div id="main" className="flex flex-1 min-h-0 text-sm">
         <article
           id="about"
           hidden={hideAbout}
-          className="max-w-lg overflow-y-auto prose p-3"
+          className="max-w-lg p-3 overflow-y-auto prose"
         >
           <AboutContent />
         </article>
-        <div className="flex-1 flex relative">
+        <div className="relative flex flex-1">
           <StatefulMapMemoized />
         </div>
       </div>
