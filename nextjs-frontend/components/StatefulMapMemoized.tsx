@@ -33,9 +33,8 @@ const StatefulMap: FC = () => {
     ssr: false,
     loading: () => <LoadingMap />,
   });
-  let initial_location = null as [number, number] | null; // Arbitrary fallback.
   const [tournaments, setTournaments] = useState<TournamentType[]>([]);
-  const [location, setLocation] = useState(initial_location);
+  const [location, setLocation] = useState<[number, number] | null>(null);
   useEffect(() => {
     let cached_location_str = localStorage.getItem(LOCATION_CACHE_KEY);
     if (cached_location_str === null) {
@@ -47,7 +46,7 @@ const StatefulMap: FC = () => {
       } catch {}
       const result = LAT_LNG_SCHEMA.safeParse(parsedLocation);
       if (result.success) {
-        initial_location = result.data;
+        setLocation(result.data);
       } else {
         console.log(
           "Error while attemping to parse cached location from local storage"
