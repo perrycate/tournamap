@@ -29,13 +29,10 @@ export type TournamentType = {
 };
 
 const StatefulMap: FC = () => {
-  const MapWithNoSSR = dynamic(
-    () => import("../components/MapClassComponent"),
-    {
-      ssr: false,
-      loading: () => <LoadingMap />,
-    }
-  );
+  const MapWithNoSSR = dynamic(() => import("../components/Map"), {
+    ssr: false,
+    loading: () => <LoadingMap />,
+  });
   let initial_location = null as [number, number] | null; // Arbitrary fallback.
   const [tournaments, setTournaments] = useState<TournamentType[]>([]);
   const [location, setLocation] = useState(initial_location);
