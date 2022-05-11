@@ -30,16 +30,16 @@ const Home: NextPage<Props> = ({ aboutMdxSource }) => {
         <link rel="icon" type="image/x-icon" href="icon-cropped.png" />
       </Head>
       <nav className="bg-teal-900">
-        <ul className="flex items-center text-white">
-          <li className="flex hover:bg-teal-800">
-            <a href="/" className="flex-1 px-2 py-1">
+        <ul className="flex items-center leading-7 text-white leading-0">
+          <li className="flex items-center hover:bg-teal-800">
+            <a href="/" className="flex-1 px-2">
               tournamap.gg
             </a>
           </li>
           <li
             id="about-btn"
             onClick={() => setHideAbout((value) => !value)}
-            className="px-2 py-1 cursor-pointer select-none hover:bg-teal-800"
+            className="px-2 cursor-pointer select-none hover:bg-teal-800"
           >
             About
           </li>
