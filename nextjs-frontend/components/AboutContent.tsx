@@ -24,7 +24,7 @@ const AboutContent: FC = () => {
         challonge.
       </p>
       <h3>If your tournament isn't listed</h3>
-      <ol className="list-decimal ml-4 ">
+      <ol className="ml-4 list-decimal ">
         <li>
           Make sure your tournament listing is publicly visible and
           discoverable. Someone should be able to find the page from the

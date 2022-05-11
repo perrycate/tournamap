@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 
 const LoadingMap: FC = () => {
   return (
@@ -8,4 +8,4 @@ const LoadingMap: FC = () => {
   );
 };
 
-export default LoadingMap;
+export default memo(LoadingMap);

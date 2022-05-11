@@ -106,7 +106,6 @@ const StatefulMap: FC = () => {
     fetchLocation();
   }, []);
   const locationCacheHit = location !== null;
-  console.log("location", location)
   return (
     <>
       <MapWithNoSSR

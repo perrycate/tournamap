@@ -19,14 +19,14 @@ const Home: NextPage = () => {
       <nav className="bg-teal-900">
         <ul className="flex items-center text-white">
           <li className="flex hover:bg-teal-800">
-            <a href="/" className="flex-1 p-2">
+            <a href="/" className="flex-1 px-2 py-1">
               tournamap.gg
             </a>
           </li>
           <li
             id="about-btn"
             onClick={() => setHideAbout((value) => !value)}
-            className="p-2 cursor-pointer select-none hover:bg-teal-800"
+            className="px-2 py-1 cursor-pointer select-none hover:bg-teal-800"
           >
             About
           </li>
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         <article
           id="about"
           hidden={hideAbout}
-          className="max-w-lg p-3 overflow-y-auto prose"
+          className="max-w-lg p-3 overflow-y-auto prose prose-blue"
         >
           <AboutContent />
         </article>
