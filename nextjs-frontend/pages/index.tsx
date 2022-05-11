@@ -49,7 +49,7 @@ const Home: NextPage<Props> = ({ aboutMdxSource }) => {
         <article
           id="about"
           hidden={hideAbout}
-          className="max-w-[30rem] p-3 overflow-y-auto leading-5 prose-sm prose prose-headings:my-2 prose-p:my-2 first:prose-headings:mt-0 prose-blue"
+          className="max-w-[30rem] p-2 overflow-y-auto leading-5 prose-sm prose prose-headings:my-1 prose-headings:leading-6 prose-p:my-1 first:prose-headings:mt-0 prose-blue"
         >
           <MDXRemote {...aboutMdxSource} />
         </article>
