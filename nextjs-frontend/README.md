@@ -9,6 +9,22 @@
 - https://stackoverflow.com/questions/63883580/tailwind-css-how-to-style-a-href-links-in-react
 - https://nextjs.org/blog/markdown
 
+## Get Started
+
+To develop, use
+
+```bash
+npm run dev
+```
+
+To build, use
+
+```bash
+npm run build && npx next export
+```
+
+The static output is in the folder `out/`.
+
 ## Commands
 
 ```bash
