@@ -8,17 +8,19 @@ import { TournamentType } from "./StatefulMapMemoized";
 const DEFAULT_ZOOM_LEVEL = 10;
 
 interface MapProps {
-  location: [number, number] | null;
+  location: [number, number];
   tournaments: TournamentType[];
+  children?: React.ReactNode;
 }
-const Map: FC<MapProps> = ({ location, tournaments }) => {
-  return location ? (
+const Map: FC<MapProps> = ({ location, tournaments, children }) => {
+  return (
     <MapContainer
       center={location}
       zoom={DEFAULT_ZOOM_LEVEL}
       worldCopyJump={true}
-      className="flex-1"
+      className="flex-1 z-[400]"
     >
+      {children}
       <a
         href="http://mapbox.com/about/maps"
         className="mapbox-logo"
@@ -54,12 +56,7 @@ const Map: FC<MapProps> = ({ location, tournaments }) => {
         </Marker>
       ))}
     </MapContainer>
-  ) : (
-    <>
-      <div className="overlay z-[1200] flex-1 flex bg-[rgba(0,0,0,0.5)]">
-        <div className="loader"></div>
-      </div>
-    </>
   );
 };
+
 export default Map;

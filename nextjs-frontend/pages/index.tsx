@@ -36,7 +36,9 @@ const Home: NextPage = () => {
         >
           <AboutContent />
         </article>
-        <StatefulMapMemoized />
+        <div className="flex-1 flex relative">
+          <StatefulMapMemoized />
+        </div>
       </div>
     </ReactDiv100vh>
   );

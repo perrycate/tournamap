@@ -21,7 +21,3 @@ npm install leaflet-defaulticon-compatibility
 npm i react-div-100vh
 npm install -D @tailwindcss/typography
 ```
-
-## Todo
-
-- Add spinner background and make it load

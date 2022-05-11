@@ -1,6 +1,9 @@
 import dynamic from "next/dynamic";
 import { FC, memo, useEffect, useState } from "react";
 import { z } from "zod";
+import LoadingMap from "./LoadingMap";
+
+const INITIAL_LOCATION = [51.505, -0.09] as [number, number]; // Arbitrary fallback.
 const LOCATION_CACHE_KEY = "userLatLng";
 const LAT_LNG_SCHEMA = z.tuple([z.number(), z.number()]);
 const TOURNAMENT_JSON = z.array(
@@ -26,11 +29,15 @@ export type TournamentType = {
 };
 
 const StatefulMap: FC = () => {
-  const MapWithNoSSR = dynamic(() => import("../components/Map"), {
-    ssr: false,
-  });
+  const MapWithNoSSR = dynamic(
+    () => import("../components/MapClassComponent"),
+    {
+      ssr: false,
+      loading: () => <LoadingMap />,
+    }
+  );
   let initial_location = null as [number, number] | null; // Arbitrary fallback.
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     let cached_location_str = localStorage.getItem(LOCATION_CACHE_KEY);
     if (cached_location_str === null) {
       console.log("User location is not set in local storage");
@@ -51,9 +58,9 @@ const StatefulMap: FC = () => {
         console.log("Local storage cleared");
       }
     }
-  }
-  let [tournaments, setTournaments] = useState<TournamentType[]>([]);
-  let [location, setLocation] = useState(initial_location);
+  }, []);
+  const [tournaments, setTournaments] = useState<TournamentType[]>([]);
+  const [location, setLocation] = useState(initial_location);
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch("tournaments.json");
@@ -65,6 +72,9 @@ const StatefulMap: FC = () => {
       }
       setTournaments(parsedResp.data);
     };
+    fetchData();
+  }, []);
+  useEffect(() => {
     const fetchLocation = async () => {
       const positionPromise = new Promise<[number, number]>(
         (resolve, reject) => {
@@ -93,10 +103,20 @@ const StatefulMap: FC = () => {
       localStorage.setItem(LOCATION_CACHE_KEY, stringifiedPosition);
       setLocation(position);
     };
-    fetchData();
     fetchLocation();
   }, []);
-  return <MapWithNoSSR location={location} tournaments={tournaments} />;
+  const locationCacheHit = location !== null;
+  console.log("location", location)
+  return (
+    <>
+      <MapWithNoSSR
+        location={location === null ? INITIAL_LOCATION : location}
+        tournaments={tournaments}
+      >
+        {!locationCacheHit && <LoadingMap />}
+      </MapWithNoSSR>
+    </>
+  );
 };
 const StatefulMapMemoized = memo(StatefulMap);
 export default StatefulMapMemoized;
