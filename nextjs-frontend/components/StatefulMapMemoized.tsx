@@ -37,6 +37,8 @@ const StatefulMap: FC = () => {
     }
   );
   let initial_location = null as [number, number] | null; // Arbitrary fallback.
+  const [tournaments, setTournaments] = useState<TournamentType[]>([]);
+  const [location, setLocation] = useState(initial_location);
   useEffect(() => {
     let cached_location_str = localStorage.getItem(LOCATION_CACHE_KEY);
     if (cached_location_str === null) {
@@ -59,8 +61,6 @@ const StatefulMap: FC = () => {
       }
     }
   }, []);
-  const [tournaments, setTournaments] = useState<TournamentType[]>([]);
-  const [location, setLocation] = useState(initial_location);
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch("tournaments.json");
@@ -107,14 +107,12 @@ const StatefulMap: FC = () => {
   }, []);
   const locationCacheHit = location !== null;
   return (
-    <>
-      <MapWithNoSSR
-        location={location === null ? INITIAL_LOCATION : location}
-        tournaments={tournaments}
-      >
-        {!locationCacheHit && <LoadingMap />}
-      </MapWithNoSSR>
-    </>
+    <MapWithNoSSR
+      location={location === null ? INITIAL_LOCATION : location}
+      tournaments={tournaments}
+    >
+      {!locationCacheHit && <LoadingMap />}
+    </MapWithNoSSR>
   );
 };
 const StatefulMapMemoized = memo(StatefulMap);
