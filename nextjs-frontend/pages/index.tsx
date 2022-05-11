@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         <article
           id="about"
           hidden={hideAbout}
-          className="max-w-lg p-3 overflow-y-auto prose prose-blue"
+          className="max-w-lg p-3 overflow-y-auto prose-sm prose prose-blue"
         >
           <AboutContent />
         </article>
