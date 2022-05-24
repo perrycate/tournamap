@@ -83,6 +83,11 @@ cp tournaments.json public/
 
 ### Contributing
 
+If you are considering making a change or sending a PR, welcome, we're grateful for the help!
+Feel free to open an issue if you have any questions about development or need anything.
+**If you are considering making a big change, we suggest opening an issue to discuss it first.
+We'd hate for any effort to go to waste if the proposed change isn't compatible for some reason!**
+
 Static files are located in `/public`, react components are in `/src`.
 The "Backend" (ie the one-off code to download tournaments and save as a json file) is in `lib/`.
 Tournament fetching code exists in `lib/util.ex`.
