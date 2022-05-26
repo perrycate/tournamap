@@ -23,7 +23,6 @@ defmodule Tournamap.MixProject do
     [
       {:httpoison, "~> 1.8"},
       {:json, "~> 1.4"},
-      {:trot, github: "hexedpackets/trot"},
       {:phoenix_html, github: "phoenixframework/phoenix_html"}
     ]
   end
