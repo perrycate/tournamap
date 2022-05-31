@@ -66,14 +66,14 @@ defmodule Util do
       Authorization: "Bearer " <> auth
     ]
 
-    {:ok, resp} = HTTPoison.post("https://api.smash.gg/gql/alpha", JSON.encode!(body), headers)
+    {:ok, resp} = HTTPoison.post("https://api.start.gg/gql/alpha", JSON.encode!(body), headers)
 
     resp.body
     |> JSON.decode!()
     |> Map.get("data")
     |> Map.get("tournaments")
     |> Map.get("nodes")
-    # Finesse data into our own non-smash.gg format.
+    # Finesse data into our own non-start.gg format.
     |> Enum.map(fn sgg_data ->
       %{
         "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
@@ -84,7 +84,7 @@ defmodule Util do
         },
         "start_time" => sgg_data["startAt"],
         "end_time" => sgg_data["endAt"],
-        "url" => "https://smash.gg/" <> (sgg_data["slug"] |> safen)
+        "url" => "https://start.gg/" <> (sgg_data["slug"] |> safen)
       }
     end)
   end
