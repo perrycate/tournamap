@@ -31,13 +31,14 @@ ol {
   color: #fff;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-}
-
 .hidden {
   display: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 #main {
