@@ -1,10 +1,19 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 
 import About from './About';
 import Map from './Map';
 
+const aboutHash = "#about";
+
 function App() {
-  const [aboutVisible, toggleAboutVisible] = useReducer(visible => !visible, false)
+  // State to toggle visibility of the about section. Initial value depends on url.
+  const [aboutVisible, toggleAboutVisible] = useReducer(visible => !visible, (window.location.hash === aboutHash));
+
+  // Browser fragment identifier ("hash") should change when about section is visible.
+  useEffect(() => {
+    window.location.hash = (aboutVisible ? aboutHash : "")
+  }, [aboutVisible]);
+
   return <>
     <nav>
       <ul>
