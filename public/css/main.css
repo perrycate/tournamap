@@ -60,9 +60,19 @@ ol {
 
 #about {
   max-width: 30rem;
-  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   overflow-y: scroll;
+  line-height: 1.4;
+  background-color: #EEEEEE;
+  color: #282828;
+  font-size: 1.1em;
 }
+#about h2 {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
 
 #map {
   flex-grow: 1;
