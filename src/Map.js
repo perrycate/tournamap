@@ -10,15 +10,12 @@ import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import icon2x from "leaflet/dist/images/marker-icon-2x.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
-import { Icon } from "leaflet/src/layer/marker/Icon"
 
 // We need to override the icon locations due to shenanigans in react-leaflet.
 let defaultIcons = new L.Icon.Default();
 defaultIcons.options.iconUrl = icon;
 defaultIcons.options.iconRetinaUrl = icon2x;
 defaultIcons.options.shadowUrl = iconShadow;
-
-const MAP_CONTAINER_ID = "map";
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
 // Location to initialize the map to if no user location can be found.
@@ -44,11 +41,9 @@ try {
   localStorage.clear();
   console.log("Local storage cleared.");
 }
-
-function getCurrentPosition() {
-  return new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+const findGeoLocation = async (resolve, reject) =>  {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
         // Success.
         (resp) => {
           resolve([resp.coords.latitude, resp.coords.longitude]);
@@ -57,15 +52,31 @@ function getCurrentPosition() {
         (e) => {
           reject(e);
         }
-      );
-    } else {
-      alert("Please enable the browser to know your location or Geolocation is not supported by this browser.");
-      reject();
+    );
+  } else {
+    alert("Please enable the browser to know your location or Geolocation is not supported by this browser.");
+    reject();
+  }
+};
+const getCurrentPosition = async (locationLoading) => {
+
+  const foundLocation = await findGeoLocation.then((location) => {
+    // Cache location for future use.
+    localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(location));
+
+    // Only set the view if it hasn't been set yet.
+    // We don't want to interfere with any scrolling
+    // the user did while we were searching for the location.
+    if (locationLoading) {
+      console.log("updating location");
+      return location;
     }
   });
+
+  return foundLocation;
 }
 
-function Map() {
+const Map = () => {
   const [tourneyData, setTourneyData] = useState([]);
   const [mapCenter, setMapCenter] = useState(initialLocation);
   // Until this is false, we wish to convey to the user that the view may suddenly
@@ -77,31 +88,23 @@ function Map() {
 
   // Load tournament data once.
   useEffect(() => {
-    fetch("tournaments.json").then((resp) => {
-      resp.json().then(setTourneyData);
-    });
+    fetch("tournaments.json")
+        .then(resp => resp.json())
+        .then(setTourneyData);
   }, []); // Passing in empty array means this only runs once.
 
   // Attempt to get location from the browser once.
   useEffect(() => {
-    getCurrentPosition()
-      .then((location) => {
-        // Cache location for future use.
-        localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(location));
+    getCurrentPosition(locationLoading)
+        .catch(console.log)
+        .finally((foundLocation) => {
+          if (foundLocation) {
+            setMapCenter(foundLocation)
+          }
+          // Remove loader overlay, if applicable.
+          setLocationLoading(false);
+        })
 
-        // Only set the view if it hasn't been set yet.
-        // We don't want to interfere with any scrolling
-        // the user did while we were searching for the location.
-        if (locationLoading) {
-          console.log("updating location");
-          setMapCenter(location);
-        }
-      })
-      .catch((e) => console.log(e))
-      .finally(() => {
-        // Remove loader overlay, if applicable.
-        setLocationLoading(false);
-      });
   }, []);
 
   return <>
@@ -139,14 +142,14 @@ function Map() {
 // affects the INITIAL view location. Anything after the fact must be set using
 // the useMap() hook, which is only available to children of MapContainer.
 // It's wonky but whatever.
-function ViewChanger({ center }) {
-  let map = useMap()
+const ViewChanger = ({ center }) => {
+  const map = useMap() // prefer const over let
   map.setView(center, map.zoom);
   return null;
 }
 
 // Grayed-out overlay with a circular loader thingy in the middle.
-function Overlay() {
+const Overlay = () => {
   return <>
     <div className="overlay"></div>
     <div className="loader"> </div>
