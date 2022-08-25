@@ -73,14 +73,10 @@ const Map = () => {
   // Attempt to get location from the browser once.
   useEffect(() => {
     findCurrentPositionAndCache(setMapCenter)
-        .catch(console.log)
-        .finally((foundLocation) => {
-          if (foundLocation) {
-            setMapCenter(foundLocation)
-          }
-          // Remove loader overlay, if applicable.
+        .then(() => {
           setLocationLoading(false);
         })
+        .catch(console.log)
 
   }, []);
 
