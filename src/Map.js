@@ -60,7 +60,7 @@ const findGeoLocation = async (resolve, reject) =>  {
 };
 const getCurrentPosition = async (locationLoading) => {
 
-  const foundLocation = await findGeoLocation.then((location) => {
+  const foundLocation = await findGeoLocation(locationArray => locationArray, console.log).then((location) => {
     // Cache location for future use.
     localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(location));
 
@@ -105,7 +105,7 @@ const Map = () => {
           setLocationLoading(false);
         })
 
-  }, []);
+  }, [locationLoading]);
 
   return <>
     <a href="http://mapbox.com/about/maps" className="mapbox-logo" target="_blank">Mapbox</a>
