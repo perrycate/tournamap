@@ -42,14 +42,15 @@ try {
   console.log("Local storage cleared.");
 }
 
-const getCurrentPosition = async () => {
+const findCurrentPositionAndCache = async (setMapCenter) => {
 
-  const cacheAndReturnLocation = (location) => {
+  const cacheLocation = (location) => {
     // Cache location for future use.
+    setMapCenter([location.coords.latitude, location.coords.longitude]);
     localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
   };
 
-  await navigator.geolocation.getCurrentPosition(cacheAndReturnLocation, console.log);
+  await navigator.geolocation.getCurrentPosition(cacheLocation, console.log);
 }
 
 const Map = () => {
@@ -71,7 +72,7 @@ const Map = () => {
 
   // Attempt to get location from the browser once.
   useEffect(() => {
-    getCurrentPosition()
+    findCurrentPositionAndCache(setMapCenter)
         .catch(console.log)
         .finally((foundLocation) => {
           if (foundLocation) {
