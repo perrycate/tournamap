@@ -1,10 +1,10 @@
 "use strict";
 
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { LayerGroup } from "react-leaflet/LayerGroup";
-import { useMap } from "react-leaflet/hooks";
+import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
+import {LayerGroup} from "react-leaflet/LayerGroup";
+import {useMap} from "react-leaflet/hooks";
 import L from "leaflet";
 
 import icon from "leaflet/dist/images/marker-icon.png";
@@ -41,39 +41,15 @@ try {
   localStorage.clear();
   console.log("Local storage cleared.");
 }
-const findGeoLocation = async (resolve, reject) =>  {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-        // Success.
-        (resp) => {
-          resolve([resp.coords.latitude, resp.coords.longitude]);
-        },
-        // Failure.
-        (e) => {
-          reject(e);
-        }
-    );
-  } else {
-    alert("Please enable the browser to know your location or Geolocation is not supported by this browser.");
-    reject();
-  }
-};
-const getCurrentPosition = async (locationLoading) => {
 
-  const foundLocation = await findGeoLocation(locationArray => locationArray, console.log).then((location) => {
+const getCurrentPosition = async () => {
+
+  const cacheAndReturnLocation = (location) => {
     // Cache location for future use.
-    localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(location));
+    localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
+  };
 
-    // Only set the view if it hasn't been set yet.
-    // We don't want to interfere with any scrolling
-    // the user did while we were searching for the location.
-    if (locationLoading) {
-      console.log("updating location");
-      return location;
-    }
-  });
-
-  return foundLocation;
+  await navigator.geolocation.getCurrentPosition(cacheAndReturnLocation, console.log);
 }
 
 const Map = () => {
@@ -95,7 +71,7 @@ const Map = () => {
 
   // Attempt to get location from the browser once.
   useEffect(() => {
-    getCurrentPosition(locationLoading)
+    getCurrentPosition()
         .catch(console.log)
         .finally((foundLocation) => {
           if (foundLocation) {
@@ -105,7 +81,7 @@ const Map = () => {
           setLocationLoading(false);
         })
 
-  }, [locationLoading]);
+  }, []);
 
   return <>
     <a href="http://mapbox.com/about/maps" className="mapbox-logo" target="_blank">Mapbox</a>
