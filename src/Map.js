@@ -19,61 +19,42 @@ defaultIcons.options.shadowUrl = iconShadow;
 
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
-const FALLBACK_INITIAL_LOCATION = [51.505, -0.09];
-const locationLoadingCacheing = (setMapCenter) => {
-// Location to initialize the map to if no user location can be found.
 
-// Check for a cached user location to use as the initial view.
-    let initialLocation = FALLBACK_INITIAL_LOCATION;
-    let locationCacheHit = false;
-    let cachedLocationStr = localStorage.getItem(LOCATION_CACHE_KEY);
-    if (cachedLocationStr == null) {
-        console.log("User location not set in local storage.");
-    } else {
-        // Make sure the cached data is in roughly the format we expect.
-        let [lat, lng] = JSON.parse(cachedLocationStr);
-        initialLocation = [lat, lng];
-        setMapCenter(initialLocation)
+const useCachingGetLocation = () => {
 
-        locationCacheHit = true; // Should be the last thing we do in case we get an exception.
-    }
-    return locationCacheHit;
-}
-
-
-const findCurrentPositionAndCache = async (setMapCenter, setLocationLoading) => {
-
-    const cacheLocation = (location) => {
-        // Cache location for future use.
-        console.log(location)
-        setMapCenter([location.coords.latitude, location.coords.longitude]);
-        localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
-    };
-
-    await navigator.geolocation.getCurrentPosition(cacheLocation, (err) => {
-        setLocationLoading(false)
-    });
-}
-
-const Map = () => {
-    const [tourneyData, setTourneyData] = useState([]);
-    const [mapCenter, setMapCenter] = useState(FALLBACK_INITIAL_LOCATION);
-    // Until this is false, we wish to convey to the user that the view may suddenly
-    // change (for example, when the user's location is finished loading from the browser.)
-    // If we hit the location cache when this module was first loading, the view is probably
-    // close to where the user actually is, and thus should not
-    // suddenly change.
+    const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
     const [locationLoading, setLocationLoading] = useState(true);
 
-    // Load tournament data once.
-    useEffect(() => {
-        fetch("tournaments.json")
-            .then(resp => resp.json().then(setTourneyData));
-    }, []); // Passing in empty array means this only runs once.
+    const locationLoadingCaching = () => {
+        let locationCacheHit = false;
+        let cachedLocationStr = localStorage.getItem(LOCATION_CACHE_KEY);
+        if (cachedLocationStr == null) {
+            console.log("User location not set in local storage.");
+        } else {
+            const location = JSON.parse(cachedLocationStr);
+            setMapCenter(location)
 
+            locationCacheHit = true;
+        }
+        return locationCacheHit;
+    }
+
+    const findCurrentPositionAndCache = async (setMapCenter, setLocationLoading) => {
+
+        const cacheLocation = (location) => {
+            // Cache location for future use.
+            console.log(location)
+            setMapCenter([location.coords.latitude, location.coords.longitude]);
+            localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
+        };
+
+        await navigator.geolocation.getCurrentPosition(cacheLocation, (err) => {
+            setLocationLoading(false)
+        });
+    }
     // Attempt to get location from the browser once.
     useEffect(() => {
-        let locationCacheHit = locationLoadingCacheing(setMapCenter);
+        let locationCacheHit = locationLoadingCaching(setMapCenter);
 
         if (locationCacheHit) {
             setLocationLoading(false);
@@ -81,6 +62,24 @@ const Map = () => {
         }
         findCurrentPositionAndCache(setMapCenter, setLocationLoading).catch(console.error)
     }, [mapCenter]);
+
+    return { mapCenter, locationLoading };
+}
+
+const Map = () => {
+    const [tourneyData, setTourneyData] = useState([]);
+    // Until this is false, we wish to convey to the user that the view may suddenly
+    // change (for example, when the user's location is finished loading from the browser.)
+    // If we hit the location cache when this module was first loading, the view is probably
+    // close to where the user actually is, and thus should not
+    // suddenly change.
+    const { mapCenter, locationLoading } = useCachingGetLocation();
+
+    // Load tournament data once.
+    useEffect(() => {
+        fetch("tournaments.json")
+            .then(resp => resp.json().then(setTourneyData));
+    }, []); // Passing in empty array means this only runs once.
 
     return <>
         <a href="http://mapbox.com/about/maps" className="mapbox-logo" target="_blank">Mapbox</a>
