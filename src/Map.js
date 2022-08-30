@@ -20,6 +20,12 @@ defaultIcons.options.shadowUrl = iconShadow;
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
 
+async function retrieveGeoLocation(cacheLocation, setLocationLoading) {
+    await navigator.geolocation.getCurrentPosition(cacheLocation, (err) => {
+        setLocationLoading(false)
+    });
+}
+
 const useCachingGetLocation = () => {
 
     const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
@@ -39,29 +45,38 @@ const useCachingGetLocation = () => {
         return locationCacheHit;
     }
 
-    const findCurrentPositionAndCache = async (setMapCenter, setLocationLoading) => {
+    const findCurrentCache = async (setMapCenter, setLocationLoading) => {
 
         const cacheLocation = (location) => {
-            // Cache location for future use.
-            console.log(location)
-            setMapCenter([location.coords.latitude, location.coords.longitude]);
             localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
         };
 
-        await navigator.geolocation.getCurrentPosition(cacheLocation, (err) => {
-            setLocationLoading(false)
-        });
+        await retrieveGeoLocation(cacheLocation, setLocationLoading);
     }
+
+    const findCurrentPosition = async (setMapCenter, setLocationLoading) => {
+
+        const setMap = (location) => {
+            setMapCenter([location.coords.latitude, location.coords.longitude]);
+        };
+
+        await retrieveGeoLocation(setMap, setLocationLoading);
+        setLocationLoading(false);
+    }
+
     // Attempt to get location from the browser once.
+
     useEffect(() => {
-        let locationCacheHit = locationLoadingCaching(setMapCenter);
+
+        let locationCacheHit = locationLoadingCaching();
 
         if (locationCacheHit) {
             setLocationLoading(false);
-            return;
+        } else {
+            findCurrentCache(setMapCenter, setLocationLoading).catch(console.error);
+            findCurrentPosition(setMapCenter, setLocationLoading).catch(console.error);
         }
-        findCurrentPositionAndCache(setMapCenter, setLocationLoading).catch(console.error)
-    }, [mapCenter]);
+    }, []);
 
     return { mapCenter, locationLoading };
 }
