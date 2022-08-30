@@ -22,7 +22,8 @@ const LOCATION_CACHE_KEY = "userLatLng";
 
 const useCachingGetLocation = () => {
 
-    const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
+    const FALLBACK_LOCATION_VALUE = [51.505, -0.09];
+    const [mapCenter, setMapCenter] = useState(FALLBACK_LOCATION_VALUE);
     const [locationLoading, setLocationLoading] = useState(true);
 
     const locationLoadingCaching = () => {
@@ -39,7 +40,7 @@ const useCachingGetLocation = () => {
         return locationCacheHit;
     }
 
-    const findCurrentCache = async (setMapCenter, setLocationLoading) => {
+    const cacheLocation = async () => {
 
         const cacheLocation = (location) => {
             localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
@@ -50,16 +51,16 @@ const useCachingGetLocation = () => {
         });
     }
 
-    const findCurrentPosition = async (setMapCenter, setLocationLoading) => {
+    const setPosition = async () => {
 
         const setMap = (location) => {
             setMapCenter([location.coords.latitude, location.coords.longitude]);
+            setLocationLoading(false);
         };
 
         await navigator.geolocation.getCurrentPosition(setMap, (err) => {
             setLocationLoading(false)
         });
-        setLocationLoading(false);
     }
 
     // Attempt to get location from the browser once.
@@ -71,8 +72,8 @@ const useCachingGetLocation = () => {
         if (locationCacheHit) {
             setLocationLoading(false);
         } else {
-            findCurrentCache(setMapCenter, setLocationLoading).catch(console.error);
-            findCurrentPosition(setMapCenter, setLocationLoading).catch(console.error);
+            cacheLocation().catch(console.error);
+            setPosition().catch(console.error);
         }
     }, []);
 
