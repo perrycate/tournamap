@@ -37,3 +37,6 @@ node_modules
 
 # Node build folder.
 /build/
+
+# no idea config
+.idea/
