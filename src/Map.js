@@ -20,12 +20,6 @@ defaultIcons.options.shadowUrl = iconShadow;
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
 
-async function retrieveGeoLocation(cacheLocation, setLocationLoading) {
-    await navigator.geolocation.getCurrentPosition(cacheLocation, (err) => {
-        setLocationLoading(false)
-    });
-}
-
 const useCachingGetLocation = () => {
 
     const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
@@ -51,7 +45,9 @@ const useCachingGetLocation = () => {
             localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify([location.coords.latitude, location.coords.longitude]));
         };
 
-        await retrieveGeoLocation(cacheLocation, setLocationLoading);
+        await navigator.geolocation.getCurrentPosition(cacheLocation, (err) => {
+            setLocationLoading(false)
+        });
     }
 
     const findCurrentPosition = async (setMapCenter, setLocationLoading) => {
@@ -60,7 +56,9 @@ const useCachingGetLocation = () => {
             setMapCenter([location.coords.latitude, location.coords.longitude]);
         };
 
-        await retrieveGeoLocation(setMap, setLocationLoading);
+        await navigator.geolocation.getCurrentPosition(setMap, (err) => {
+            setLocationLoading(false)
+        });
         setLocationLoading(false);
     }
 
