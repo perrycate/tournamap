@@ -5,6 +5,7 @@
 
 nav {
   background-color: #263d42;
+  font-size: large;
 }
 
 body {
@@ -17,9 +18,14 @@ ol {
 
 .navbar {
   display: inline-block;
-  padding: 0.2em;
+  padding: .8rem;
   font-family: Arial;
   cursor: pointer;
+  border-right: 2px #3C6068 solid;
+}
+
+.navbar:hover {
+  background-color: #1E3034;
 }
 
 .navbar a {
@@ -30,6 +36,7 @@ ol {
 .navbar a {
   color: #fff;
 }
+
 
 .hidden {
   display: none;

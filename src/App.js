@@ -18,7 +18,7 @@ function App() {
     <nav>
       <ul>
         <li className="navbar"><a href="/index.html">tournamap.gg</a></li>
-        <li className="navbar" onClick={toggleAboutVisible}>About</li>
+        <li className="navbar" onClick={toggleAboutVisible}>about</li>
       </ul>
     </nav>
     <div id="main">
