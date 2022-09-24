@@ -1,21 +1,10 @@
-"use strict";
-
 import {useEffect, useState} from "react";
 import "leaflet/dist/leaflet.css";
-import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
+import {MapContainer, TileLayer} from "react-leaflet";
 import {LayerGroup} from "react-leaflet/LayerGroup";
 import {useMap} from "react-leaflet/hooks";
-import L from "leaflet";
 
-import icon from "leaflet/dist/images/marker-icon.png";
-import icon2x from "leaflet/dist/images/marker-icon-2x.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
-
-// We need to override the icon locations due to shenanigans in react-leaflet.
-let defaultIcons = new L.Icon.Default();
-defaultIcons.options.iconUrl = icon;
-defaultIcons.options.iconRetinaUrl = icon2x;
-defaultIcons.options.shadowUrl = iconShadow;
+import TournamentMarker from 'components/TournamentMarker'
 
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
@@ -102,14 +91,7 @@ const Map = () => {
             <LayerGroup>
                 {
                     tourneyData.map((tourneyJSON) =>
-                        <Marker key={tourneyJSON.url} position={tourneyJSON.location} icon={defaultIcons}>
-                            <Popup>
-                                <h2>
-                                    <a href={tourneyJSON["url"]} target="_blank">{tourneyJSON["name"]}</a>
-                                </h2>
-                                <p>{new Date(tourneyJSON["start_time"] * 1000).toLocaleString()}</p>
-                            </Popup>
-                        </Marker>
+                        <TournamentMarker key={tourneyJSON.url} tournament={tourneyJSON} />
                     )
                 }
             </LayerGroup>

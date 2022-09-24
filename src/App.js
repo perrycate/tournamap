@@ -2,6 +2,9 @@ import { useReducer, useEffect } from "react";
 
 import About from './About';
 import Map from './Map';
+import VisibleTournaments from "components/VisibleTournaments";
+
+import VisibleTournamentsProvider from 'providers/VisibleTournamentsProvider';
 
 const aboutHash = "#about";
 
@@ -22,8 +25,10 @@ function App() {
       </ul>
     </nav>
     <div id="main">
-      {aboutVisible ? <About /> : null}
-      <Map />
+      <VisibleTournamentsProvider>
+        {aboutVisible ? <About /> : <VisibleTournaments />}
+        <Map />
+      </VisibleTournamentsProvider>
     </div>
     {/* Cloudflare Web Analytics */}
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{token: 05103a5d8df244d99ffa9c79f09f8a64}"></script>
