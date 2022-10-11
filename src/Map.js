@@ -71,8 +71,11 @@ const Map = () => {
 
     // Fetch location on first render.
     useEffect(() => {
-        const userLocation = getLocation().then((location) => {
+        getLocation()
+          .then((location) => {
             setMapCenter(location);
+          })
+          .finally(() => {
             setLocationLoading(false);
         });
     }, []);
