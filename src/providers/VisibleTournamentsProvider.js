@@ -21,6 +21,7 @@ const VisibleTournamentsProvider = ({ children }) => {
         // The intersection observer callback will be called whenever a marker enters or exits the map viewport.
         new IntersectionObserver((entries) => {
             setVisibleTournamentsProps((visibleTournamentsProps) => {
+                // We need a new set here so that React realizes that the state has actually changed.
                 const currentlyVisibleTournamentsProps = new Set(visibleTournamentsProps);
 
                 entries.forEach((entry) => {
