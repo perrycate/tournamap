@@ -12,7 +12,7 @@ const VisibleTournamentsProvider = ({ children }) => {
 
     const watchedElementToTournamentPropsRef = useRef(new Map());
 
-    const visibleTournamentsDebounced = useDebouncedState(
+    const visibleTournamentsPropsDebounced = useDebouncedState(
         visibleTournamentsProps,
         VISIBILITY_CHANGE_DEBOUNCE_WAIT_MS
     );
@@ -20,8 +20,8 @@ const VisibleTournamentsProvider = ({ children }) => {
     const intersectionObserverRef = useRef(
         // The intersection observer callback will be called whenever a marker enters or exits the map viewport.
         new IntersectionObserver((entries) => {
-            setVisibleTournamentsProps((visibleTournaments) => {
-                const currentlyVisibleTournaments = new Set(visibleTournaments);
+            setVisibleTournamentsProps((visibleTournamentsProps) => {
+                const currentlyVisibleTournamentsProps = new Set(visibleTournamentsProps);
 
                 entries.forEach((entry) => {
                     const props = watchedElementToTournamentPropsRef.current.get(entry.target);
@@ -30,13 +30,13 @@ const VisibleTournamentsProvider = ({ children }) => {
                     }
 
                     if (entry.isIntersecting) {
-                        currentlyVisibleTournaments.add(props);
+                        currentlyVisibleTournamentsProps.add(props);
                     } else {
-                        currentlyVisibleTournaments.delete(props);
+                        currentlyVisibleTournamentsProps.delete(props);
                     }
                 });
 
-                return currentlyVisibleTournaments;
+                return currentlyVisibleTournamentsProps;
             });
         })
     );
@@ -65,13 +65,13 @@ const VisibleTournamentsProvider = ({ children }) => {
         },
     }), []);
 
-    const visibleTournamentsArray = useMemo(() => (
-        Array.from(visibleTournamentsDebounced)
-    ), [visibleTournamentsDebounced]);
+    const visibleTournamentsPropsArray = useMemo(() => (
+        Array.from(visibleTournamentsPropsDebounced)
+    ), [visibleTournamentsPropsDebounced]);
 
     return (
         <VisibleTournamentsTrackingContext.Provider value={trackingContextValue}>
-            <VisibleTournamentsContext.Provider value={visibleTournamentsArray}>
+            <VisibleTournamentsContext.Provider value={visibleTournamentsPropsArray}>
                 {children}
             </VisibleTournamentsContext.Provider>
         </VisibleTournamentsTrackingContext.Provider>
