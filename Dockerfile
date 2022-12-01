@@ -4,4 +4,4 @@ COPY . .
 RUN apk add --no-cache aws-cli git
 RUN yes | mix deps.get
 RUN yes | mix compile # TODO there's gotta be some "build for production" option We're neglecting to use here.
-ENTRYPOINT ["./upload.sh"]
+ENTRYPOINT ["./deploy/freshen_data.sh"]
