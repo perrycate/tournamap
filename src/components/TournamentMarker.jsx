@@ -18,6 +18,10 @@ defaultIcon.options.shadowUrl = iconShadow;
 const TournamentMarker = memo(({ tournament }) => {
     const markerRef = useRef(null);
 
+    // I don't like having to pull watch and unwatch from a function, but
+    // we need to give an intersection observer direct access to the DOM element
+    // containing each marker _somehow_, and trying to pass that state up to parents
+    // seems even worse.
     const { watch, unwatch } = useContext(VisibleTournamentsTrackingContext);
 
     const openPopup = useCallback(() => {

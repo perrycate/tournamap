@@ -7,6 +7,11 @@ import useDebouncedState from 'use/useDebouncedState';
 
 const VISIBILITY_CHANGE_DEBOUNCE_WAIT_MS = 250;
 
+/*
+ * Keeps track of the tournaments currently visible on screen.
+ * Provides to children contexts containing the set of currently visible tournaments,
+ * and functions to begin watching new tournament elements.
+ */
 const VisibleTournamentsProvider = ({ children }) => {
     const [visibleTournamentsProps, setVisibleTournamentsProps] = useState(new Set());
 
