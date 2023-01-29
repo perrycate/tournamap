@@ -1,6 +1,8 @@
 name: Deploy to S3
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: workflow_dispatch
+on:
+  workflow_dispatch
+  [push]
 jobs:
   Upload-To-S3:
     runs-on: ubuntu-latest
