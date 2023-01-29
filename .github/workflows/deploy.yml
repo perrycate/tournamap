@@ -1,5 +1,5 @@
 name: Deploy
-run-name: Deploy to S3
+run-name: Deploy to Prod
 on: [push]
 jobs:
   Upload-To-S3:
@@ -17,3 +17,7 @@ jobs:
       - run: npm run build
       - run: rm build/tournaments.json
       - run: aws s3 sync build/ s3://tournamap.gg/
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
