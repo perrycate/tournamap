@@ -76,7 +76,7 @@ const Map = () => {
     }, []);
 
     return <>
-        <a href="http://mapbox.com/about/maps" className="mapbox-logo" target="_blank">Mapbox</a>
+        <a href="http://mapbox.com/about/maps" className="mapbox-logo" target="_blank" rel="noreferrer">Mapbox</a>
         <MapContainer center={mapCenter} zoom={DEFAULT_ZOOM_LEVEL} id="map" worldCopyJump={true}>
             {locationLoading && <>
                 <div className="overlay"></div>
