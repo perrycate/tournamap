@@ -16,6 +16,9 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: rm build/tournaments.json
+      - run: echo $AWS_DEFAULT_REGION
+        env:
+          AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
       - run: aws s3 sync build/ s3://tournamap.gg/
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
