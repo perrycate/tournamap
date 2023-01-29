@@ -1,0 +1,31 @@
+name: Deploy
+run-name: Deploy to Prod
+on: workflow_dispatch
+jobs:
+  Upload-To-S3:
+    runs-on: ubuntu-latest
+    # Apparently this was supposed to be something more reasonable like "production" or "staging".
+    # I had no idea what I was doing and don't see a way to change this in GitHub (this is what
+    # associates the env vars and stuff) and am too lazy to remake it.
+    environment: Default I guess
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Build code
+        run: npm install && npm run build && rm build/tournaments.json
+
+      - name: Upload code to S3
+        run: aws s3 sync build/ s3://tournamap.gg/
+
+      - name: Invalidate Cloudfront Cache
+        run: aws cloudfront create-invalidation --distribution-id EUR7VJJJUF4IY --path '/*'
