@@ -4,6 +4,7 @@ on: [push]
 jobs:
   Upload-To-S3:
     runs-on: ubuntu-latest
+    environment: Default I guess
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
