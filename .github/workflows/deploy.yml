@@ -13,6 +13,7 @@ jobs:
           node-version: 16
 
 
+      - run: npm install
       - run: npm run build
       - run: rm build/tournaments.json
       - run: aws s3 sync build/ s3://tournamap.gg/
