@@ -5,25 +5,24 @@ jobs:
   Upload-To-S3:
     runs-on: ubuntu-latest
     environment: Default I guess
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+
       - name: Set up node
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
+      - name: Build code
+        run: npm install && npm run build && rm build/tournaments.json
 
-      - run: npm install
-      - run: npm run build
-      - run: rm build/tournaments.json
+      - name: Upload code to S3
+        run: aws s3 sync build/ s3://tournamap.gg/
 
-
-      - run: echo $AWS_DEFAULT_REGION
-        env:
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      - run: aws s3 sync build/ s3://tournamap.gg/
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Invalidate Cloudfront Cache
+        run: aws cloudfront create-invalidation --distribution-id EUR7VJJJUF4IY --path '/*'
