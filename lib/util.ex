@@ -51,6 +51,7 @@ defmodule Util do
       lng
       startAt
       endAt
+      updatedAt
       slug
     }
   }
@@ -84,6 +85,7 @@ defmodule Util do
         },
         "start_time" => sgg_data["startAt"],
         "end_time" => sgg_data["endAt"],
+        "updated_at" => sgg_data["updatedAt"],
         "url" => "https://start.gg/" <> (sgg_data["slug"])
       }
     end)
