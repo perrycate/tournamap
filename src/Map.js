@@ -73,14 +73,10 @@ const Map = () => {
     useEffect(() => {
         const fetchTournamentData = async () => {
             const response = await fetch("tournaments.json")
-            const parsedResponse =  await response.json()
-            return parsedResponse
+            return await response.json()
         }
 
-        fetchTournamentData().then((tourneyData) =>  {
-            setTourneyData(tourneyData.tournament_data)
-        })
-    
+        fetchTournamentData().then((tourneyData) =>  { setTourneyData(tourneyData.tournament_data) })
     }, []);
 
     return <>
