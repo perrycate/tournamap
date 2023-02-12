@@ -20,7 +20,7 @@ defmodule Util do
         tourneys = 1..10
                    |> Enum.map(&get_tourney_page(auth, &1))
                    |> List.flatten
-        {:ok, tourneys}
+        { :ok, %{ tournament_data: tourneys, metadata: %{ updated_at: DateTime.now!("Etc/UTC") |> DateTime.to_unix()}} }
     end
   end
 

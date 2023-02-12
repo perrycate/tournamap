@@ -45,9 +45,9 @@ const TournamentMarker = memo(({ tournament }) => {
         <ReactLeaflet.Marker ref={markerRef} key={tournament.url} position={tournament.location} icon={defaultIcon}>
             <ReactLeaflet.Popup>
                 <h2>
-                    <a href={tournament['url']} target="_blank" rel="noreferrer">{tournament['name']}</a>
+                    <a href={tournament.url} target="_blank" rel="noreferrer">{tournament.name}</a>
                 </h2>
-                <p>{new Date(tournament['start_time'] * 1000).toLocaleString()}</p>
+                <p>{new Date(tournament.start_time * 1000).toLocaleString()}</p>
             </ReactLeaflet.Popup>
         </ReactLeaflet.Marker>
     );

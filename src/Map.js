@@ -71,8 +71,12 @@ const Map = () => {
 
     // Load tournament data on first render.
     useEffect(() => {
-        fetch("tournaments.json")
-            .then(resp => resp.json().then(setTourneyData));
+        const fetchTournamentData = async () => {
+            const response = await fetch("tournaments.json")
+            return await response.json()
+        }
+
+        fetchTournamentData().then((tourneyData) =>  { setTourneyData(tourneyData.tournament_data) })
     }, []);
 
     return <>
