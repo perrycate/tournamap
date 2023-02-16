@@ -130,7 +130,8 @@ const  Legend = ({metadata}) => {
         const legend = new L.Control({ position: "bottomleft" });
   
         legend.onAdd = () => {
-          const div = L.DomUtil.create("div", "mapbox-legend");
+          const div = L.DomUtil.create("div");
+          div.id = "mapbox-legend"
           div.innerHTML = `<h4>Last Updated: ${new Date(metadata.updated_at * 1000).toLocaleString()}</h4>`;
           return div;
         };

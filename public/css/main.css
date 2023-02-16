@@ -137,7 +137,7 @@ ol {
   background-size: 65px 20px;
 }
 
-.mapbox-legend {
+#mapbox-legend {
   background-color: white;
   padding: 1em;
 }
