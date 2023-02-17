@@ -4,9 +4,7 @@ import {MapContainer, TileLayer} from "react-leaflet";
 import {LayerGroup} from "react-leaflet/LayerGroup";
 import {useMap} from "react-leaflet/hooks";
 import L from "leaflet";
-
-import TournamentMarker from 'components/TournamentMarker'
-// import Legend from "components/Legend";
+import TournamentMarker from 'components/TournamentMarker';
 
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
