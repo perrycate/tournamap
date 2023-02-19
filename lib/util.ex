@@ -81,7 +81,7 @@ defmodule Util do
       {:ok, resp} ->
         try do
           resp.body
-          |> JSON.decode!()
+          |> JSON.decode!
           |> Map.get("data")
           |> Map.get("tournaments")
           |> Map.get("nodes")
@@ -101,7 +101,7 @@ defmodule Util do
             }
             end )
           rescue
-            _e -> raise "Ran into an issue while parsing and mapping over the response body in get_tourney_page function."
+            _e -> raise "Ran into an issue while parsing the response body in get_tourney_page function."
           end
       {:error, reason} -> IO.puts(reason)
     end
