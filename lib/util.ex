@@ -2,11 +2,19 @@ defmodule Util do
   @auth_env_var "SMASH_GG_TOKEN"
   @default_storage_file "tournaments.json"
 
-  def update_tourneys(filename \\ @default_storage_file) do
-    {:ok, tourneys} = get_all_tourneys()
-    tourneys
-    |> JSON.encode!
-    |> then(&File.write!(filename, &1))
+  def update_tourneys do
+    case get_all_tourneys() do
+      {:ok, tourneys} ->
+        try do
+          tourneys
+          |> JSON.encode!
+          |> then(&File.write!(@default_storage_file, &1))
+        rescue
+          e ->  IO.puts("An error occurred while either encoding the tourneys map to JSON or writing to the json file: " <> e.message)
+        end
+      {:error, reason} -> IO.puts(reason)
+    end
+
   end
 
   def get_all_tourneys do
@@ -17,45 +25,47 @@ defmodule Util do
         # let's just assume there are no more than 10 lol.
         # (At time of writing there are less than 1,000 upcoming tournaments,
         # which can easily fit in only 2 pages.)
-        tourneys = 1..10
-                   |> Enum.map(&get_tourney_page(auth, &1))
-                   |> List.flatten
-        { :ok, %{ tournament_data: tourneys, metadata: %{ updated_at: DateTime.now!("Etc/UTC") |> DateTime.to_unix()}} }
+        try do
+          tourneys = 1..10 |> Enum.map(&get_tourney_page(auth, &1)) |> List.flatten
+          { :ok, %{ tournament_data: tourneys, metadata: %{ updated_at: DateTime.now!("Etc/UTC") |> DateTime.to_unix()}} }
+        rescue
+          e -> {:error, e.message}
+        end
     end
   end
 
   def get_tourney_page(auth, page_num) do
     body = %{
       "query" => "query AllUltimateTournaments($perPage: Int, $pageNum: Int) {
-  tournaments(query: {
-    page: $pageNum,
-    perPage: $perPage
-    filter: {
-      videogameIds: [1386]
-      upcoming: true
-      hasOnlineEvents: false
-    }
-  }) {
-    pageInfo {
-      total
-      totalPages
-      page
-      perPage
-      sortBy
-      filter
-    }
-    nodes {
-      id
-      name
-      lat
-      lng
-      startAt
-      endAt
-      updatedAt
-      slug
-    }
-  }
-}",
+        tournaments(query: {
+          page: $pageNum,
+          perPage: $perPage
+          filter: {
+            videogameIds: [1386]
+            upcoming: true
+            hasOnlineEvents: false
+          }
+        })
+          { pageInfo {
+            total
+            totalPages
+            page
+            perPage
+            sortBy
+            filter
+          }
+          nodes {
+            id
+            name
+            lat
+            lng
+            startAt
+            endAt
+            updatedAt
+            slug
+          }
+        }
+      }",
       "variables" => %{
         "perPage" => 500,
         "pageNum" => page_num
@@ -67,27 +77,33 @@ defmodule Util do
       Authorization: "Bearer " <> auth
     ]
 
-    {:ok, resp} = HTTPoison.post("https://api.start.gg/gql/alpha", JSON.encode!(body), headers)
-
-    resp.body
-    |> JSON.decode!()
-    |> Map.get("data")
-    |> Map.get("tournaments")
-    |> Map.get("nodes")
-    # Finesse data into our own non-start.gg format.
-    |> Enum.map(fn sgg_data ->
-      %{
-        "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
-        "name" => sgg_data["name"],
-        "location" => %{
-          "lat" => sgg_data["lat"],
-          "lng" => sgg_data["lng"]
-        },
-        "start_time" => sgg_data["startAt"],
-        "end_time" => sgg_data["endAt"],
-        "updated_at" => sgg_data["updatedAt"],
-        "url" => "https://start.gg/" <> (sgg_data["slug"])
-      }
-    end)
+    case HTTPoison.post("https://api.start.gg/gql/alpha", JSON.encode!(body), headers) do
+      {:ok, resp} ->
+        try do
+          resp.body
+          |> JSON.decode!()
+          |> Map.get("data")
+          |> Map.get("tournaments")
+          |> Map.get("nodes")
+          # Finesse data into our own non-start.gg format.
+          |> Enum.map(fn sgg_data ->
+            %{
+              "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
+              "name" => sgg_data["name"],
+              "location" => %{
+                "lat" => sgg_data["lat"],
+                "lng" => sgg_data["lng"]
+              },
+              "start_time" => sgg_data["startAt"],
+              "end_time" => sgg_data["endAt"],
+              "updated_at" => sgg_data["updatedAt"],
+              "url" => "https://start.gg/" <> (sgg_data["slug"])
+            }
+            end )
+          rescue
+            _e -> raise "Ran into an issue while parsing and mapping over the response body in get_tourney_page function."
+          end
+      {:error, reason} -> IO.puts(reason)
+    end
   end
 end
