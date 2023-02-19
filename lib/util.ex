@@ -5,13 +5,9 @@ defmodule Util do
   def update_tourneys do
     case get_all_tourneys() do
       {:ok, tourneys} ->
-        try do
-          tourneys
-          |> JSON.encode!
-          |> then(&File.write!(@default_storage_file, &1))
-        rescue
-          e ->  IO.puts("An error occurred while either encoding the tourneys map to JSON or writing to the json file: " <> e.message)
-        end
+        tourneys
+        |> JSON.encode!
+        |> then(&File.write!(@default_storage_file, &1))
       {:error, reason} -> IO.puts(reason)
     end
 
@@ -25,12 +21,12 @@ defmodule Util do
         # let's just assume there are no more than 10 lol.
         # (At time of writing there are less than 1,000 upcoming tournaments,
         # which can easily fit in only 2 pages.)
-        try do
-          tourneys = 1..10 |> Enum.map(&get_tourney_page(auth, &1)) |> List.flatten
+        tourneys =
+          1..10
+          |> Enum.map(&get_tourney_page(auth, &1))
+          |> List.flatten
+
           { :ok, %{ tournament_data: tourneys, metadata: %{ updated_at: DateTime.now!("Etc/UTC") |> DateTime.to_unix()}} }
-        rescue
-          e -> {:error, e.message}
-        end
     end
   end
 
@@ -79,30 +75,30 @@ defmodule Util do
 
     case HTTPoison.post("https://api.start.gg/gql/alpha", JSON.encode!(body), headers) do
       {:ok, resp} ->
-        try do
-          resp.body
-          |> JSON.decode!
-          |> Map.get("data")
-          |> Map.get("tournaments")
-          |> Map.get("nodes")
-          # Finesse data into our own non-start.gg format.
-          |> Enum.map(fn sgg_data ->
-            %{
-              "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
-              "name" => sgg_data["name"],
-              "location" => %{
-                "lat" => sgg_data["lat"],
-                "lng" => sgg_data["lng"]
-              },
-              "start_time" => sgg_data["startAt"],
-              "end_time" => sgg_data["endAt"],
-              "updated_at" => sgg_data["updatedAt"],
-              "url" => "https://start.gg/" <> (sgg_data["slug"])
-            }
-            end )
-          rescue
-            _e -> raise "Ran into an issue while parsing the response body in get_tourney_page function."
-          end
+        case JSON.decode(resp.body) do
+          {:ok, response = %{"success" => false}} ->
+            IO.puts(Map.get(response, "message"))
+          {:ok, response = %{"success" => true}} ->
+            response
+            |> Map.get("data")
+            |> Map.get("tournaments")
+            |> Map.get("nodes")
+            # Finesse data into our own non-start.gg format.
+            |> Enum.map(fn sgg_data ->
+              %{
+                "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
+                "name" => sgg_data["name"],
+                "location" => %{
+                  "lat" => sgg_data["lat"],
+                  "lng" => sgg_data["lng"]
+                },
+                "start_time" => sgg_data["startAt"],
+                "end_time" => sgg_data["endAt"],
+                "updated_at" => sgg_data["updatedAt"],
+                "url" => "https://start.gg/" <> (sgg_data["slug"])
+              }
+              end )
+        end
       {:error, reason} -> IO.puts(reason)
     end
   end
