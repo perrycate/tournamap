@@ -78,7 +78,7 @@ defmodule Util do
         case JSON.decode(resp.body) do
           {:ok, response = %{"success" => false}} ->
             IO.puts(Map.get(response, "message"))
-          {:ok, response = %{"success" => true}} ->
+          {:ok, response} ->
             response
             |> Map.get("data")
             |> Map.get("tournaments")
