@@ -48,8 +48,7 @@ defmodule Util do
             perPage
             sortBy
             filter
-          }
-          nodes {
+          } nodes {
             id
             name
             lat
