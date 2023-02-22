@@ -8,7 +8,7 @@ defmodule Util do
         tourneys
         |> JSON.encode!
         |> then(&File.write!(@default_storage_file, &1))
-      {:error, reason} -> IO.puts(reason)
+      {:error, reason} -> IO.puts(:stderr, reason)
     end
 
   end
@@ -41,8 +41,7 @@ defmodule Util do
             upcoming: true
             hasOnlineEvents: false
           }
-        })
-          { pageInfo {
+        }) { pageInfo {
             total
             totalPages
             page
@@ -75,31 +74,40 @@ defmodule Util do
 
     case HTTPoison.post("https://api.start.gg/gql/alpha", JSON.encode!(body), headers) do
       {:ok, resp} ->
-        case JSON.decode(resp.body) do
-          {:ok, response = %{"success" => false}} ->
-            IO.puts(Map.get(response, "message"))
-          {:ok, response} ->
-            response
-            |> Map.get("data")
-            |> Map.get("tournaments")
-            |> Map.get("nodes")
-            # Finesse data into our own non-start.gg format.
-            |> Enum.map(fn sgg_data ->
-              %{
-                "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
-                "name" => sgg_data["name"],
-                "location" => %{
-                  "lat" => sgg_data["lat"],
-                  "lng" => sgg_data["lng"]
-                },
-                "start_time" => sgg_data["startAt"],
-                "end_time" => sgg_data["endAt"],
-                "updated_at" => sgg_data["updatedAt"],
-                "url" => "https://start.gg/" <> (sgg_data["slug"])
-              }
-              end )
-        end
-      {:error, reason} -> IO.puts(reason)
+        resp.body
+        |> JSON.decode
+        |> format_decoded_response
+      {:error, reason} ->
+        IO.puts(:stderr, reason)
+        System.stop(1)
+    end
+  end
+
+  def format_decoded_response({:ok, decoded_map}) do
+    case {:ok, decoded_map} do
+      {:ok, decoded_map = %{"success" => false}} ->
+        IO.puts(:stderr, Map.get(decoded_map, "message"))
+        System.stop(1)
+      {:ok, decoded_map} ->
+        decoded_map
+        |> Map.get("data")
+        |> Map.get("tournaments")
+        |> Map.get("nodes")
+        # Finesse data into our own non-start.gg format.
+        |> Enum.map(fn sgg_data ->
+          %{
+            "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
+            "name" => sgg_data["name"],
+            "location" => %{
+              "lat" => sgg_data["lat"],
+              "lng" => sgg_data["lng"]
+            },
+            "start_time" => sgg_data["startAt"],
+            "end_time" => sgg_data["endAt"],
+            "updated_at" => sgg_data["updatedAt"],
+            "url" => "https://start.gg/" <> (sgg_data["slug"])
+          }
+          end )
     end
   end
 end
