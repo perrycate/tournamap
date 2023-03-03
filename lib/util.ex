@@ -8,7 +8,9 @@ defmodule Util do
         tourneys
         |> JSON.encode!
         |> then(&File.write!(@default_storage_file, &1))
-      {:error, reason} -> IO.puts(:stderr, reason)
+      {:error, reason} ->
+        IO.puts(:stderr, reason)
+        System.stop(1)
     end
 
   end
@@ -82,31 +84,30 @@ defmodule Util do
     end
   end
 
+  def format_decoded_response({:ok, decoded_map = %{"success" => false}}) do
+    IO.puts(:stderr, Map.get(decoded_map, "message"))
+    System.stop(1)
+  end
+
   def format_decoded_response({:ok, decoded_map}) do
-    case {:ok, decoded_map} do
-      {:ok, decoded_map = %{"success" => false}} ->
-        IO.puts(:stderr, Map.get(decoded_map, "message"))
-        System.stop(1)
-      {:ok, decoded_map} ->
-        decoded_map
-        |> Map.get("data")
-        |> Map.get("tournaments")
-        |> Map.get("nodes")
-        # Finesse data into our own non-start.gg format.
-        |> Enum.map(fn sgg_data ->
-          %{
-            "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
-            "name" => sgg_data["name"],
-            "location" => %{
-              "lat" => sgg_data["lat"],
-              "lng" => sgg_data["lng"]
-            },
-            "start_time" => sgg_data["startAt"],
-            "end_time" => sgg_data["endAt"],
-            "updated_at" => sgg_data["updatedAt"],
-            "url" => "https://start.gg/" <> (sgg_data["slug"])
-          }
-          end )
-    end
+    decoded_map
+    |> Map.get("data")
+    |> Map.get("tournaments")
+    |> Map.get("nodes")
+    # Finesse data into our own non-start.gg format.
+    |> Enum.map(fn sgg_data ->
+      %{
+        "external_id" => "smashgg-" <> Integer.to_string(sgg_data["id"]),
+        "name" => sgg_data["name"],
+        "location" => %{
+          "lat" => sgg_data["lat"],
+          "lng" => sgg_data["lng"]
+        },
+        "start_time" => sgg_data["startAt"],
+        "end_time" => sgg_data["endAt"],
+        "updated_at" => sgg_data["updatedAt"],
+        "url" => "https://start.gg/" <> (sgg_data["slug"])
+      }
+      end )
   end
 end
