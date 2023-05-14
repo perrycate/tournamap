@@ -3,6 +3,9 @@
 # You must have elixir, mix, aws cli, etc. on your system, and the S3 bucket
 # should be one you control.
 
+# Exit if anything returns a non-zero status.
+set -e
+
 # There's an assumption here that update_tourneys is actually writing a
 # file named exactly tournaments.json. Really we should just be passing in
 # a file name or something, or better yet just writing it to stdout or something.
