@@ -20,10 +20,8 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      - name: Install elixir
-        run: sudo apt-get install -y elixir
-
       - name: Install Dependencies
+        run: sudo apt-get install -y elixir erlang-dev
         run: yes | mix deps.get
 
       - name: Build
