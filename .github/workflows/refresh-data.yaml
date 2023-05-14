@@ -23,5 +23,11 @@ jobs:
       - name: Install elixir
         run: sudo apt-get install -y elixir
 
+      - name: Install Dependencies
+        run: yes | mix deps.get
+
+      - name: Build
+        run: yes | mix compile
+
       - name: Run data freshening script
         run: deploy/freshen_data.sh
