@@ -1,5 +1,9 @@
 name: Freshen Data
 run-name: Freshen Data
+on:
+  workflow-dispatch:
+  schedule:
+    - cron:  '*/30 * * * *'
 jobs:
   freshen-tournament-data:
     runs-on: ubuntu-latest
