@@ -36,6 +36,7 @@ jobs:
       - name: Install Dependencies
         run: |
           mix deps.get
+          mix deps.compile
 
       - name: Run data freshening script
         run: deploy/freshen_data.sh
