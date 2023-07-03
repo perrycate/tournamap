@@ -13,7 +13,7 @@ DATA_FILE_NAME="./tournaments.json"
 
 # Really we ought to package the update_tourneys thing properly instead of
 # building it on whatever machine is running this. Oh well.
-yes | MIX_ENV=prod ERL_FLAGS="-smp 'enable' -smp maxt 1" mix run -e "<your_elixir_code_here>"
+yes | MIX_ENV=prod ERL_FLAGS="-smp 'enable' -smp maxt 1" mix run -e Util.update_tourneys
 
 
 # Only upload anything if the data file isn't empty.
