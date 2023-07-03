@@ -19,6 +19,10 @@ jobs:
     steps:
       - name: Install BEAM stuff
         uses: erlef/setup-beam@v1.16.0
+        with:
+          otp-version: '26'
+          elixir-version: '1.15'
+          gleam-version: false
 
       # REMOVE ME BEFORE MERGE.
       - name: Setup tmate session
