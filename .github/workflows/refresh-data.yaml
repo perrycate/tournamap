@@ -1,0 +1,35 @@
+name: Freshen Data
+run-name: Freshen Data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '*/30 * * * *'
+jobs:
+  freshen-tournament-data:
+    runs-on: ubuntu-latest
+    # Apparently this was supposed to be something more reasonable like "production" or "staging".
+    # I had no idea what I was doing and don't see a way to change this in GitHub (this is what
+    # associates the env vars and stuff) and am too lazy to remake it.
+    environment: Default I guess
+    env:
+      SMASH_GG_TOKEN: ${{ secrets.SMASH_GG_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    steps:
+      - name: Install BEAM stuff
+        uses: erlef/setup-beam@v1.16.0
+        with:
+          otp-version: '25'
+          elixir-version: '1.14'
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          mix deps.get
+          mix deps.compile
+
+      - name: Run data freshening script
+        run: deploy/freshen_data.sh

@@ -23,7 +23,9 @@ defmodule Tournamap.MixProject do
     [
       {:httpoison, "~> 1.8"},
       {:json, "~> 1.4"},
-      {:phoenix_html, github: "phoenixframework/phoenix_html"}
+      {:phoenix_html, github: "phoenixframework/phoenix_html"},
+      # See https://github.com/deadtrickster/ssl_verify_fun.erl/issues/29
+      {:ssl_verify_fun, "~>1.1.0", [env: :prod, hex: "ssl_verify_fun", repo: "hexpm", optional: false, manager: :rebar3, override: :true]}
     ]
   end
 end
