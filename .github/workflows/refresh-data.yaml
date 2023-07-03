@@ -29,8 +29,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt-get install -y elixir erlang-dev
-          yes | mix deps.get
+          sudo apt-get install -y elixir erlang-dev rebar
+          mix deps.get
 
       - name: Run data freshening script
         run: deploy/freshen_data.sh

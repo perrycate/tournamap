@@ -13,8 +13,7 @@ DATA_FILE_NAME="./tournaments.json"
 
 # Really we ought to package the update_tourneys thing properly instead of
 # building it on whatever machine is running this. Oh well.
-yes | MIX_ENV=prod ERL_FLAGS="-smp 'enable' -smp maxt 1" mix run -e Util.update_tourneys
-
+yes | mix run -e Util.update_tourneys
 
 # Only upload anything if the data file isn't empty.
 if [ $(cat $DATA_FILE_NAME | wc -c) -gt 0 ]
