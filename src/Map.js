@@ -3,8 +3,8 @@ import "leaflet/dist/leaflet.css";
 import {MapContainer, TileLayer} from "react-leaflet";
 import {LayerGroup} from "react-leaflet/LayerGroup";
 import {useMap} from "react-leaflet/hooks";
-
-import TournamentMarker from 'components/TournamentMarker'
+import L from "leaflet";
+import TournamentMarker from 'components/TournamentMarker';
 
 const DEFAULT_ZOOM_LEVEL = 10;
 const LOCATION_CACHE_KEY = "userLatLng";
@@ -55,6 +55,7 @@ const getLocation = () => {
 
 const Map = () => {
     const [tourneyData, setTourneyData] = useState([]);
+    const [tourneyMetadata, setTourneyMetadata] = useState({});
     const [mapCenter, setMapCenter] = useState(FALLBACK_INITIAL_LOCATION);
     const [locationLoading, setLocationLoading] = useState(true);
 
@@ -76,7 +77,10 @@ const Map = () => {
             return await response.json()
         }
 
-        fetchTournamentData().then((tourneyData) =>  { setTourneyData(tourneyData.tournament_data) })
+        fetchTournamentData().then((tourneyData) =>  { 
+            setTourneyData(tourneyData.tournament_data) 
+            setTourneyMetadata(tourneyData.metadata)
+        })
     }, []);
 
     return <>
@@ -87,6 +91,7 @@ const Map = () => {
                 <div className="loader"></div>
             </>}
             <ViewChanger center={mapCenter}/>
+            <Legend metadata={tourneyMetadata}/>
             <TileLayer
                 attribution='© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>'
                 url="https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ3JhdmlkZGQiLCJhIjoiY2wwZDh3eDE2MDZ1OTNrcGYybjhsNmN2diJ9.cPvRZK6WTt_wjQSa-DzblQ"
@@ -115,5 +120,24 @@ const ViewChanger = ({center}) => {
     map.setView(center, map.zoom);
     return null;
 }
+
+const  Legend = ({metadata}) => {
+    const map = useMap()
+    useEffect(() => {
+      if (map && metadata.updated_at) {
+        const legend = new L.Control({ position: "bottomleft" });
+  
+        legend.onAdd = () => {
+          const div = L.DomUtil.create("div");
+          div.id = "mapbox-legend"
+          div.innerHTML = `<h4>Last Updated: ${new Date(metadata.updated_at * 1000).toLocaleString()}</h4>`;
+          return div;
+        };
+  
+        legend.addTo(map);
+      }
+    }, [map, metadata.updated_at]);
+    return null;
+  }
 
 export default Map;
